@@ -1,0 +1,98 @@
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Mail, Phone, Send, User } from 'lucide-react';
+import { toast } from 'sonner';
+// 团队成员信息
+const teamMembers = [
+    {
+        name: '张强',
+        roleKey: 'contact.role1',
+        phone: '+86 137 6487 2538',
+        phoneLocal: '',
+        email: 'zxq@zxqconsulting.com',
+    },
+    {
+        name: '李静',
+        roleKey: 'contact.role2',
+        phone: '+86 138 166 89487',
+        phoneLocal: '+81 080 962 86389',
+        email: 'yuqian@zxqconsulting.com',
+    },
+    {
+        name: '刘潇',
+        roleKey: 'contact.role3',
+        phone: '+86 182 177 94992',
+        phoneLocal: '+61 466 981 227',
+        email: 'dianaliu@zxqconsulting.com',
+    },
+];
+const Contact = () => {
+    const { t } = useTranslation();
+    const [inquiryType, setInquiryType] = useState('sell-to-china');
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        company: '',
+        message: '',
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const inquiryTypes = [
+        { id: 'sell-to-china', labelKey: 'contact.inquiry.sellToChina', icon: '📈' },
+        { id: 'sourcing', labelKey: 'contact.inquiry.sourcing', icon: '🌍' },
+        { id: 'other', labelKey: 'contact.inquiry.other', icon: '💬' },
+    ];
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            // 调用后端 API 发送邮件
+            const response = await fetch('/api/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    company: formData.company,
+                    message: formData.message,
+                    inquiryType: inquiryType,
+                }),
+            });
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                throw new Error(data.error || 'Failed to send email');
+            }
+            // 发送表单提交追踪事件
+            if (typeof window !== 'undefined' && window.zxqTrack) {
+                window.zxqTrack.form('inquiry', {
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    company: formData.company,
+                    inquiry_type: inquiryType,
+                    message: formData.message,
+                }, 'success');
+            }
+            toast.success(t('contact.success'));
+            setFormData({ name: '', email: '', phone: '', company: '', message: '' });
+        }
+        catch (error) {
+            console.error('Email send error:', error);
+            toast.error(t('contact.submitFailed'));
+        }
+        finally {
+            setIsSubmitting(false);
+        }
+    };
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+    return (_jsx("section", { id: "contact", className: "py-24 bg-gradient-to-b from-white to-emerald-50", children: _jsxs("div", { className: "container mx-auto px-6", children: [_jsxs("div", { className: "text-center mb-16 animate-on-scroll", children: [_jsx("h2", { className: "text-3xl md:text-4xl font-bold text-gray-900 mb-4", style: { fontFamily: 'Noto Serif SC, serif' }, children: t('contact.title') }), _jsx("p", { className: "text-xl text-gray-500 max-w-2xl mx-auto", children: t('contact.subtitle') }), _jsx("div", { className: "w-24 h-1 bg-gradient-to-r from-emerald-400 to-teal-500 mx-auto mt-6 rounded-full" })] }), _jsx("div", { className: "rounded-2xl overflow-hidden shadow-lg border border-gray-100 mb-12 max-w-4xl mx-auto", children: _jsx("img", { src: "/images/paris-europe.png", alt: "", className: "w-full h-40 md:h-48 object-cover object-center" }) }), _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-12", children: [_jsx("div", { className: "animate-on-scroll", children: _jsxs("div", { className: "bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 text-white h-full", children: [_jsx("h3", { className: "text-2xl font-bold mb-2", children: "\u4E0A\u6D77\u5F20\u5C0F\u5F3A\u4F01\u4E1A\u54A8\u8BE2\u4E8B\u52A1\u6240" }), _jsx("p", { className: "text-emerald-100 text-sm mb-8", children: "\u53EF\u9760\u00B7\u4E13\u4E1A\u00B7\u9AD8\u6548" }), _jsx("div", { className: "space-y-6", children: teamMembers.map((member, index) => (_jsx("div", { className: "bg-white/10 rounded-2xl p-5 backdrop-blur-sm", children: _jsxs("div", { className: "flex items-start gap-4", children: [_jsx("div", { className: "w-12 h-12 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0", children: _jsx(User, { className: "w-6 h-6" }) }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsx("div", { className: "font-bold text-lg", children: member.name }), _jsx("div", { className: "text-emerald-100 text-sm mb-2", children: t(member.roleKey) }), _jsxs("div", { className: "space-y-1", children: [_jsxs("div", { className: "flex items-center gap-2 text-sm", children: [_jsx(Phone, { className: "w-4 h-4 opacity-70" }), _jsx("span", { children: member.phone })] }), member.phoneLocal && (_jsxs("div", { className: "flex items-center gap-2 text-sm", children: [_jsx(Phone, { className: "w-4 h-4 opacity-70" }), _jsx("span", { children: member.phoneLocal })] })), _jsxs("div", { className: "flex items-center gap-2 text-sm", children: [_jsx(Mail, { className: "w-4 h-4 opacity-70" }), _jsx("span", { className: "truncate", children: member.email })] })] })] })] }) }, index))) }), _jsxs("div", { className: "mt-8 pt-6 border-t border-white/20", children: [_jsx("div", { className: "text-lg font-medium mb-2", children: "\u5FAE\u4FE1\u516C\u4F17\u53F7/\u89C6\u9891\u53F7" }), _jsx("div", { className: "opacity-80 text-sm", children: "\u5F20\u5C0F\u5F3A\u51FA\u6D77" })] })] }) }), _jsx("div", { className: "bg-white rounded-3xl p-8 shadow-xl animate-on-scroll", children: _jsxs("form", { onSubmit: handleSubmit, className: "space-y-6", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-3", children: "\u6211\u60F3\u54A8\u8BE2 *" }), _jsx("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-3", children: inquiryTypes.map((type) => (_jsxs("button", { type: "button", onClick: () => setInquiryType(type.id), className: `p-4 rounded-xl border-2 transition-all flex items-center gap-2 ${inquiryType === type.id
+                                                        ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                                                        : 'border-gray-200 hover:border-emerald-300'}`, children: [_jsx("span", { className: "text-xl", children: type.icon }), _jsx("span", { className: "font-medium text-sm", children: t(type.labelKey) })] }, type.id))) })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [_jsxs("div", { children: [_jsxs("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: [t('contact.name'), " *"] }), _jsx("input", { type: "text", name: "name", value: formData.name, onChange: handleChange, required: true, placeholder: t('contact.namePlaceholder'), className: "w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" })] }), _jsxs("div", { children: [_jsxs("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: [t('contact.email'), " *"] }), _jsx("input", { type: "email", name: "email", value: formData.email, onChange: handleChange, required: true, placeholder: t('contact.emailPlaceholder'), className: "w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" })] })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [_jsxs("div", { children: [_jsxs("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: [t('contact.phone'), " *"] }), _jsx("input", { type: "tel", name: "phone", value: formData.phone, onChange: handleChange, required: true, placeholder: t('contact.phonePlaceholder'), className: "w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: t('contact.company') }), _jsx("input", { type: "text", name: "company", value: formData.company, onChange: handleChange, placeholder: t('contact.companyPlaceholder'), className: "w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all" })] })] }), _jsxs("div", { children: [_jsxs("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: [t('contact.message'), " *"] }), _jsx("textarea", { name: "message", value: formData.message, onChange: handleChange, required: true, rows: 5, placeholder: t('contact.messagePlaceholder'), className: "w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-none" })] }), _jsx("button", { type: "submit", disabled: isSubmitting, className: "w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed", children: isSubmitting ? (_jsxs(_Fragment, { children: [_jsx("div", { className: "w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" }), _jsx("span", { children: "\u63D0\u4EA4\u4E2D..." })] })) : (_jsxs(_Fragment, { children: [_jsx(Send, { className: "w-5 h-5" }), _jsx("span", { children: t('contact.submit') })] })) })] }) })] })] }) }));
+};
+export default Contact;
