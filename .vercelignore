@@ -1,9 +1,10 @@
+# 排除 node_modules
 node_modules
-.git
-.env
-.env.local
-.env.*.local
-dist
-api-dist
-*.ts
-!api/*.js
+
+# 排除 TypeScript 配置
+tsconfig*.json
+
+# 排除源代码目录 - Vercel 会自动构建
+# 但 api 目录下的 .js 文件需要保留
+api/**/*.ts
+!api/**/*.js
