@@ -20403,6 +20403,395 @@ Tool use: **edit_file_v2**
 等一下，这样 vercel.json 会有问题。API 函数应该直接用 TypeScript，不需要预编译。让我改用另一种方法 - 使用 Vite 的 Vercel 插件。
 
 实际上，最简单的方法是使用 @
+</think>
+
+实际上，让我用更简单的方法 - 使用 Vite 的 Vercel 插件：
+vercel/vite preset。让我试试：
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+ Thinking...
+ "import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+import vercel from 'vercel'
+export default defineConfig({
+  plugins: [react(), vercel()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+})
+
+</think>
+<think>
+好的，让我用 vercel 配置 vite：
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+现在让我重新测试一下：
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+tsconfig.api.json 有错误。让我简化它：<think>
+ Thinking...
+ "{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "lib": ["ES2020"],
+    "outDir": "./api-dist",
+    "rootDir": "./api",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": false,
+    "noEmit": false
+  },
+  "include": ["api/**/*"]
+}
+
+</think>
+
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+现在让我再测试一下：
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+vercel 包不适合在 vite.config.ts 中使用。让我换一个方法，直接使用之前的 tsconfig.api.json 方法，先
+</think>
+
+让我换一个方法，直接用 API 文件编译的方式：
+<think>
+ Thinking...
+ "import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+})
+
+</think>
+恢复 vite.config.ts：
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+现在让我修改 package.json 来只编译 src：
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+让我直接读取然后写入：
+
+---
+
+Tool use: **read_file_v2**
+
+---
+
+<think>
+让我直接修复 build 脚本：
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+现在让我换一个更简单的解决方案。问题的根源在于 Vercel 需要单独编译 API 代码。
+
+让我使用一个更简单的方法 - 将
+</think>
+
+让我换一个更简单的解决方案 - 使用纯 Java API 路由改成一个简单的代理服务，不依赖 @vercel/node：<think>
+ Thinking...
+ "// Email API 路由
+// 使用 nodemailer 直接发送邮件
+export default async function handler(req, res) {
+  // 设置 CORS 头
+  res.setHeader('Access-Control-Allow-Credentials', true)
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  )
+  if (req.method === 'OPTIONS') {
+    res.status(200).end()
+    return
+  }
+  // 只允许 POST 请求
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' })
+  }
+  const { name, email, phone, company, message, inquiryType } = req.body
+  // 验证必填字段
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'Missing required fields' })
+  }
+  // 获取环境变量中的邮件配置
+  const SMTP_HOST = process.env.SMTP_HOST
+  const SMTP_PORT = process.env.SMTP_PORT
+  const SMTP_USER = process.env.SMTP_USER
+  const SMTP_PASS = process.env.SMTP_PASS
+  const TO_EMAILS = process.env.TO_EMAILS || 'customer@zxqconsulting.com,3740977@qq.com'
+  // 如果没有配置 SMTP，返回错误
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
+    return res.status(500).json({ error: 'Email service not configured' })
+  }
+  // 构建邮件内容
+  const inquiryTypeLabels = {
+    'sell-to-china': '卖到中国',
+    'sourcing': '采购/sourcing',
+    'other': '其他'
+  }
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #333;">🌏 新询盘通知 - Global2China</h2>
+      
+      <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold; width: 120px;">询盘类型</td>
+          <td style="padding: 10px; border-bottom: 1px solid #eee;">${inquiryTypeLabels[inquiryType] || inquiryType}</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">姓名</td>
+          <td style="padding: 10px; border-bottom: 1px solid #eee;">${name}</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">邮箱</td>
+          <td style="padding: 10px; border-bottom: 1px solid #eee;">${email}</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">电话</td>
+          <td style="padding: 10px; border-bottom: 1px solid #eee;">${phone || '未填写'}</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">公司</td>
+          <td style="padding: 10px; border-bottom: 1px solid #eee;">${company || '未填写'}</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; vertical-align: top; font-weight: bold;">询盘内容</td>
+          <td style="padding: 10px; vertical-align: top;">${(message || '').replace(/\
+/g, '<br>')}</td>
+        </tr>
+      </table>
+      <p style="color: #999; font-size: 12px; margin-top: 30px;">
+        此邮件由 Global2China 网站自动发送
+      </p>
+    </div>
+  `
+  const textContent = `
+新询盘通知 - Global2China
+询盘类型: ${inquiryTypeLabels[inquiryType] || inquiryType}
+姓名: ${name}
+邮箱: ${email}
+电话: ${phone || '未填写'}
+公司: ${company || '未填写'}
+询盘内容:
+${message}
+  `
+  try {
+    const nodemailer = await import('nodemailer')
+    
+    const transporter = nodemailer.createTransport({
+      host: SMTP_HOST,
+      port: parseInt(SMTP_PORT || '587'),
+      secure: SMTP_PORT === '465',
+      auth: {
+        user: SMTP_USER,
+        pass: SMTP_PASS,
+      },
+    })
+    const recipientEmails = TO_EMAILS.split(',').map(e => e.trim())
+    
+    await transporter.sendMail({
+      from: `"Global2China" <${SMTP_USER}>`,
+      to: recipientEmails.join(', '),
+      subject: `🌏 新询盘通知 - ${name} - ${inquiryTypeLabels[inquiryType] || 'Global2China'}`,
+      text: textContent,
+      html: htmlContent,
+    })
+    return res.status(200).json({ success: true })
+  } catch (error) {
+    console.error('Email send error:', error)
+    return res.status(500).json({ error: 'Failed to send email' })
+  }
+}
+
+</think>
+Script API 函数，不依赖 TypeScript：
+
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+现在让我更新 vercel.json 指向 .js 文件：<think>
+ Thinking...
+ "{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" }
+  ]
+}
+
+</think>
+
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+现在让我删除旧的 TypeScript API 文件和 tsconfig.api.json：
+
+---
+
+Tool use: **delete_file**
+
+undefined
+
+---
+
+<think>
+现在让我也删除 tsconfig.api.json：
+
+---
+
+Tool use: **delete_file**
+
+undefined
+
+---
+
+<think>
+现在让我测试构建：
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+构建成功！现在提交并推送：
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+已
+</think>
+
+已推送！这次改用纯 JavaScript 文件来解决 Type推送。现在等待 Vercel 部署。让用户测试：Script 类型问题。让 Vercel 重新部署后再试试提交表单。
+
+---
+
+_**User**_
+
+“22:05:49.228 Running build in Washington, D.C., USA (East) – iad1
+22:05:49.229 Build machine configuration: 2 cores, 8 GB
+22:05:49.240 Retrieving list of deployment files...
+22:05:49.243 Skipping build cache, deployment was triggered without cache.
+22:05:49.718 Downloading 51 deployment files...
+22:05:51.789 Running "vercel build"
+22:05:52.495 Vercel CLI 50.28.0
+22:05:53.239 Installing dependencies...
+22:06:01.383 
+22:06:01.384 added 387 packages in 8s
+22:06:01.384 
+22:06:01.384 69 packages are looking for funding
+22:06:01.386   run `npm fund` for details
+22:06:01.442 Running "npm run build"
+22:06:01.540 
+22:06:01.541 > global2china-web@1.0.0 build
+22:06:01.541 > tsc -b && vite build
+22:06:01.541 
+22:06:05.553 [36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+22:06:05.616 transforming...
+22:06:09.663 [32m✓[39m 1765 modules transformed.
+22:06:10.200 rendering chunks...
+22:06:10.216 computing gzip size...
+22:06:10.240 [2mdist/[22m[32mindex.html                 [39m[1m[2m  0.99 kB[22m[1m[22m[2m │ gzip:   0.67 kB[22m
+22:06:10.240 [2mdist/[22m[2massets/[22m[35mindex-D1q2st3x.css  [39m[1m[2m 50.43 kB[22m[1m[22m[2m │ gzip:   8.51 kB[22m
+22:06:10.241 [2mdist/[22m[2massets/[22m[36mindex-qypKlFjC.js   [39m[1m[33m703.98 kB[39m[22m[2m │ gzip: 224.54 kB[22m
+22:06:10.241 [33m
+22:06:10.241 (!) Some chunks are larger than 500 kB after minification. Consider:
+22:06:10.242 - Using dynamic import() to code-split the application
+22:06:10.242 - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+22:06:10.242 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+22:06:10.242 [32m✓ built in 4.66s[39m
+22:06:10.532 Using TypeScript 5.9.3 (local user-provided)
+22:06:13.321 api/send-email.ts(1,52): error TS2307: Cannot find module '@vercel/node' or its corresponding type declarations.
+22:06:13.321 
+22:06:13.732 Build Completed in /vercel/output [21s]
+22:06:13.860 Deploying outputs...
+22:06:18.171 Deployment completed
+22:06:19.241 Creating build cache...”
+
+---
+
+_**Assistant (claude-4.6-opus-max-thinking)**_
+
+<think>
+看起来 V
+</think>
+
+Vercel 似乎还在ercel 缓存了旧的构建。让我检查一下是否还有旧的 ts 文件在 api 目录中：缓存旧的文件。让我检查一下：
+
 
 ---
 
