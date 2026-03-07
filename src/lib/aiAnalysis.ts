@@ -244,6 +244,23 @@ ${categoryLevel1Name ? `- 一级分类：${categoryLevel1Name}` : ''}`;
 
   let prompt = '';
 
+  // 根据语言参数生成回复语言指令
+  const languageInstructions: Record<string, string> = {
+    zh: '【重要】你必须全程使用简体中文回答，包括所有专业术语、概念名称、证书名称、法规名称等。禁止使用任何英文词汇或英文缩写。',
+    en: '【Important】You must answer entirely in English, including all professional terms, concept names, certificate names, and regulatory names. Use English translations for all terms.',
+    ja: '【重要】あなたは日本語で完全に回答する必要がありますの専門用語、概念名、証明書名、法規名なども含めてすべて日本語で回答してください。',
+    ko: '【중요】모든 전문 용어, 개념 이름, 증서 이름, 법규 이름을 포함하여 완전히 한국어로 답변해야 합니다.',
+    de: '【Wichtig】Sie müssen vollständig auf Deutsch antworten, einschließlich aller Fachbegriffe, Konzeptnamen, Zertifikatsnamen und法规namen.',
+    fr: '【Important】Vous devez répondre entièrement en français, y compris tous les termes professionnels, noms de concepts, noms de certificats et noms de réglementations.',
+    es: '【Importante】Debe responder completamente en español, incluidos todos los términos profesionales, nombres de conceptos, nombres de certificados y nombres de regulaciones.',
+    it: '【Importante】Devi rispondere interamente in italiano, inclusi tutti i termini professionali, nomi di concetti, nomi di certificati e nomi di regolamenti.',
+    pt: '【Importante】Você deve responder inteiramente em português, incluindo todos os termos profissionais, nomes de conceitos, nomes de certificados e nomes de regulamentações.',
+    ru: '【Важно】Вы должны отвечать полностью на русском языке, включая все профессиональные термины, названия концепций, названия сертификатов и названия нормативных актов.',
+    ar: '【重要】يجب أن تجيب بالكامل باللغة العربية، بما في ذلك جميع المصطلحات المهنية وأسماء المفاهيم وأسماء الشهادات وأسماء اللوائح.',
+  };
+
+  const langInstruction = languageInstructions[language] || languageInstructions.zh;
+
   if (mode === 'sell-to-china') {
     // 卖到中国模式：分析进口可行性 - 针对特定区域
     prompt = `你是一位专业的国际贸易咨询顾问，专注于帮助海外产品进入中国市场。请基于以下详细信息提供一个全面的AI分析。
@@ -254,6 +271,8 @@ ${userContextBlock}
 【用户选择的其他关键信息】
 - 目标销售区域: ${targetRegion}
 ${countryRegion ? `- 产品来源地区: ${countryRegion}` : ''}
+
+${langInstruction}
 
 【请提供以下分析（用JSON格式返回）】
 {
@@ -295,7 +314,7 @@ ${countryRegion ? `- 产品来源地区: ${countryRegion}` : ''}
   }
 }
 
-请用中文回复，只返回JSON，不要其他内容。`;
+请用${language === 'zh' ? '中文' : language === 'en' ? 'English' : language === 'ja' ? '日本語' : language === 'ko' ? '한국어' : '中文'}回复，只返回JSON，不要其他内容。禁止在回复中出现任何英文单词或英文缩写（如"ROI"、"GMP"、"COA"、"EMC"等必须用对应语言表达）。`;
   } else {
     // 采购模式：分析采购选品建议 - 针对特定国家和区域
     prompt = `你是一位专业的海外采购咨询顾问，专注于帮助中国采购商从海外采购优质产品。请基于以下详细信息提供一个全面的AI分析。
@@ -306,6 +325,8 @@ ${userContextBlock}
 【用户选择的其他关键信息】
 - 采购来源地区: ${originRegion || targetRegion}
 ${countryName ? `- 采购目标国家: ${countryName}` : ''}
+
+${langInstruction}
 
 【请提供以下分析（用JSON格式返回）】
 {
@@ -347,7 +368,7 @@ ${countryName ? `- 采购目标国家: ${countryName}` : ''}
   }
 }
 
-请用中文回复，只返回JSON，不要其他内容。`;
+请用${language === 'zh' ? '中文' : language === 'en' ? 'English' : language === 'ja' ? '日本語' : language === 'ko' ? '한국어' : '中文'}回复，只返回JSON，不要其他内容。禁止在回复中出现任何英文单词或英文缩写（如"ROI"、"GMP"、"COA"、"EMC"等必须用对应语言表达）。`;
   }
 
   try {
@@ -362,7 +383,7 @@ ${countryName ? `- 采购目标国家: ${countryName}` : ''}
         messages: [
           {
             role: 'system',
-            content: '你是一位专业的国际贸易咨询顾问，擅长分析海外产品进入中国市场的可行性，以及海外采购选品策略。你的分析必须严格基于用户选择的具体选项：包括一级分类、二级分类、以及「品类与目标人群说明」。若说明中明确目标人群为老年人/银发族，则整篇分析须针对老年市场、适老产品，不得与母婴、儿童等其它品类混淆。若用户提供了「用户身份」或「当前业务阶段」，请据此调整：身份决定建议的深度与角度（如品牌方侧重合规与品牌落地，贸易商侧重供应链与利润），阶段决定侧重点（调研期侧重可行性与风险，准备首次进口侧重流程与时间表，已有经验侧重拓展与优化）。'
+            content: '你是一位专业的国际贸易咨询顾问，擅长分析海外产品进入中国市场的可行性，以及海外采购选品策略。你的分析必须严格基于用户选择的具体选项：包括一级分类、二级分类、以及「品类与目标人群说明」。若说明中明确目标人群为老年人/银发族，则整篇分析须针对老年市场、适老产品，不得与母婴、儿童等其它品类混淆。若用户提供了「用户身份」或「当前业务阶段」，请据此调整：身份决定建议的深度与角度（如品牌方侧重合规与品牌落地，贸易商侧重供应链与利润），阶段决定侧重点（调研期侧重可行性与风险，准备首次进口侧重流程与时间表，已有经验侧重拓展与优化）。\n\n【重要】你必须全程使用简体中文回答，包括所有专业术语、概念名称、证书名称、法规名称等。禁止使用任何英文词汇或英文缩写（如"ROI"、"GMP"、"COA"等必须用中文表达，如"投资回报率"、"国际药品生产质量管理规范"、"产品成分分析证书"等）。即使是常见的中英混合表达（如"保健品蓝帽子"）也应改为纯中文（"保健食品蓝帽子标识"）。你的回复必须是100%的纯中文内容，JSON中的所有字符串值也必须是纯中文。'
           },
           {
             role: 'user',
