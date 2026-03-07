@@ -1,6 +1,8 @@
 import { Globe, Mail, Phone, MapPin, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -10,19 +12,19 @@ const Footer = () => {
         <div className="container mx-auto px-6 text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sparkles className="w-5 h-5 text-amber-300" />
-            <span className="text-emerald-100 text-sm font-medium">开启您的全球之旅</span>
+            <span className="text-emerald-100 text-sm font-medium">{t('footer.cta.subtitle')}</span>
           </div>
           <h3 className="text-3xl md:text-4xl font-bold text-white mb-6" style={{ fontFamily: 'Noto Serif SC, serif' }}>
-            准备好拓展中国市场了吗？
+            {t('footer.cta.title')}
           </h3>
           <p className="text-emerald-100 text-lg max-w-2xl mx-auto mb-8">
-            专业的团队、丰富的经验，帮助您的产品快速进入中国市场
+            {t('footer.cta.desc')}
           </p>
           <a
             href="#contact"
             className="inline-flex items-center gap-2 bg-white text-emerald-700 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all hover:scale-105"
           >
-            立即咨询
+            {t('footer.cta.button')}
           </a>
         </div>
       </div>
@@ -37,30 +39,30 @@ const Footer = () => {
                 <Globe className="w-7 h-7 text-white" />
               </div>
               <div>
-                <span className="text-xl font-bold text-white">上海张小强</span>
-                <span className="block text-xs text-gray-400">企业咨询事务所</span>
+                <span className="text-xl font-bold text-white">{t('nav.brandName')}</span>
+                <span className="block text-xs text-gray-400">{t('footer.companyType')}</span>
               </div>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              专业的海外产品进口咨询服务，帮助海外企业快速进入中国市场。AI技术赋能企业全球扩张。
+              {t('footer.about')}
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <MapPin className="w-4 h-4" />
-              <span>上海市</span>
+              <span>{t('footer.location')}</span>
             </div>
           </div>
 
           {/* Services */}
           <div>
-            <h4 className="text-white font-bold mb-6 text-lg">核心服务</h4>
+            <h4 className="text-white font-bold mb-6 text-lg">{t('footer.services.title')}</h4>
             <ul className="space-y-3">
               {[
-                '海外选品服务',
-                '采购代理服务',
-                '市场准入咨询',
-                '渠道对接服务',
-                '品牌本地化',
-                '海外市场调研',
+                t('footer.services.item1'),
+                t('footer.services.item2'),
+                t('footer.services.item3'),
+                t('footer.services.item4'),
+                t('footer.services.item5'),
+                t('footer.services.item6'),
               ].map((item, index) => (
                 <li key={index}>
                   <a href="#services" className="text-gray-400 hover:text-emerald-400 transition-colors text-sm">
@@ -73,15 +75,15 @@ const Footer = () => {
 
           {/* Markets */}
           <div>
-            <h4 className="text-white font-bold mb-6 text-lg">全球市场</h4>
+            <h4 className="text-white font-bold mb-6 text-lg">{t('footer.markets.title')}</h4>
             <ul className="space-y-3">
               {[
-                { name: '日本', flag: '🇯🇵' },
-                { name: '欧洲', flag: '🇪🇺' },
-                { name: '东南亚', flag: '🌏' },
-                { name: '澳大利亚', flag: '🦘' },
-                { name: '美国', flag: '🇺🇸' },
-                { name: '中东', flag: '🏜️' },
+                { name: t('footer.markets.jp'), flag: '🇯🇵' },
+                { name: t('footer.markets.eu'), flag: '🇪🇺' },
+                { name: t('footer.markets.se'), flag: '🌏' },
+                { name: t('footer.markets.au'), flag: '🦘' },
+                { name: t('footer.markets.us'), flag: '🇺🇸' },
+                { name: t('footer.markets.me'), flag: '🏜️' },
               ].map((item, index) => (
                 <li key={index}>
                   <a href="#markets" className="text-gray-400 hover:text-emerald-400 transition-colors text-sm flex items-center gap-2">
@@ -95,14 +97,14 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold mb-6 text-lg">快速链接</h4>
+            <h4 className="text-white font-bold mb-6 text-lg">{t('footer.links.title')}</h4>
             <ul className="space-y-3">
               {[
-                { name: '关于我们', href: '#about' },
-                { name: '服务项目', href: '#services' },
-                { name: '全球市场', href: '#markets' },
-                { name: 'AI工具', href: '#tools' },
-                { name: '联系我们', href: '#contact' },
+                { name: t('footer.links.about'), href: '#about' },
+                { name: t('footer.links.services'), href: '#services' },
+                { name: t('footer.links.markets'), href: '#markets' },
+                { name: t('footer.links.tools'), href: '#tools' },
+                { name: t('footer.links.contact'), href: '#contact' },
               ].map((item, index) => (
                 <li key={index}>
                   <a href={item.href} className="text-gray-400 hover:text-emerald-400 transition-colors text-sm">
@@ -118,14 +120,14 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-500 text-sm">
-              © {currentYear} 上海张小强企业咨询事务所. 版权所有
+              © {currentYear} {t('footer.copyright')}
             </p>
             <div className="flex items-center gap-6">
               <a href="#" className="text-gray-500 hover:text-emerald-400 text-sm transition-colors">
-                隐私政策
+                {t('footer.privacy')}
               </a>
               <a href="#" className="text-gray-500 hover:text-emerald-400 text-sm transition-colors">
-                服务条款
+                {t('footer.terms')}
               </a>
             </div>
           </div>

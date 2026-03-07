@@ -5,10 +5,10 @@ import { Menu, X, Globe, ArrowRight, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navigation = [
-  { name: '首页', href: '#hero' },
-  { name: '服务项目', href: '#services' },
-  { name: '智能决策', href: '#tools' },
-  { name: '关于我们', href: '#about' },
+  { nameKey: 'nav.home', href: '#hero' },
+  { nameKey: 'nav.services', href: '#services' },
+  { nameKey: 'nav.tools', href: '#tools' },
+  { nameKey: 'nav.about', href: '#about' },
 ];
 
 const languages = [
@@ -74,8 +74,8 @@ export default function Navbar() {
               <Globe className="w-7 h-7 text-white" />
             </div>
             <div>
-              <span className="text-xl font-bold text-gray-900">上海张小强</span>
-              <span className="block text-xs text-gray-500 -mt-1 font-medium">海外优品·中国上市</span>
+              <span className="text-xl font-bold text-gray-900">{t('nav.brandName')}</span>
+              <span className="block text-xs text-gray-500 -mt-1 font-medium">{t('nav.brandSlogan')}</span>
             </div>
           </Link>
 
@@ -83,11 +83,11 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center gap-1">
             {navigation.map((item) => (
               <a
-                key={item.name}
+                key={item.nameKey}
                 href={item.href}
                 className="px-4 py-2 text-gray-700 hover:text-emerald-600 font-medium rounded-lg hover:bg-emerald-50 transition-all"
               >
-                {item.name}
+                {t(item.nameKey)}
               </a>
             ))}
           </div>
