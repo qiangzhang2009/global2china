@@ -227,6 +227,9 @@ const Tools = () => {
       tracker.toolStart('ai-analysis', {
         analysis_mode: analysisMode,
         product_type: productTypeForApi,
+        product_name: getProductName(),
+        category_level1: getCategoryLevel1Name(),
+        category_level2: getCategoryLevel2Name(),
         target_region: analysisMode === 'sell-to-china' ? chinaRegion : sourcingRegion,
         selected_market: analysisMode === 'sourcing' ? selectedMarket : undefined,
         user_role: userRoleId,
@@ -281,9 +284,16 @@ const Tools = () => {
         tracker.toolComplete('ai-analysis', {
           analysis_mode: analysisMode,
           product_type: productTypeForApi,
+          product_name: getProductName(),
+          category_level1: getCategoryLevel1Name(),
+          category_level2: getCategoryLevel2Name(),
           target_region: analysisMode === 'sell-to-china' ? chinaRegion : sourcingRegion,
           selected_market: analysisMode === 'sourcing' ? selectedMarket : undefined,
+          user_role: userRoleId ? USER_ROLES.find((r) => r.id === userRoleId)?.name : undefined,
+          business_stage: businessStageId ? BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name : undefined,
           result_summary: result ? 'completed' : 'failed',
+          ai_result_content: result?.content ? result.content.substring(0, 500) : undefined, // 保存前500字
+          ai_result_length: result?.content?.length || 0,
         }, duration);
       }
 
