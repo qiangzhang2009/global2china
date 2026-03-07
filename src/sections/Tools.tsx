@@ -20,7 +20,6 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  analyzeWithAI,
   PRODUCT_CATEGORIES,
   getProductTypeFromCategory,
   getCategoryContextForAI,
@@ -33,6 +32,52 @@ import {
   AnalysisMode,
   AnalysisResult,
 } from '@/lib/aiAnalysis';
+
+// 调用后端 API 进行 AI 分析
+async function callAIAnalysisAPI(
+  productType: string,
+  targetRegion: string,
+  mode: AnalysisMode,
+  originRegion?: string,
+  options?: {
+    productName?: string;
+    categoryLevel1Name?: string;
+    categoryLevel2Name?: string;
+    categoryContext?: string;
+    countryName?: string;
+    countryRegion?: string;
+    userRole?: string;
+    businessStage?: string;
+    language?: string;
+  }
+): Promise<AnalysisResult> {
+  const response = await fetch('/api/ai-analysis', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      productType,
+      targetRegion,
+      mode,
+      originRegion,
+      options,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.error || 'AI analysis failed');
+  }
+
+  return {
+    content: data.result.content,
+    productType: data.result.productType,
+    targetRegion: data.result.targetRegion,
+    mode: data.result.mode,
+  };
+}
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -194,7 +239,7 @@ const Tools = () => {
     try {
       let result;
       if (analysisMode === 'sell-to-china') {
-        result = await analyzeWithAI(
+        result = await callAIAnalysisAPI(
           productTypeForApi,
           chinaRegion,
           'sell-to-china',
@@ -211,7 +256,7 @@ const Tools = () => {
           }
         );
       } else {
-        result = await analyzeWithAI(
+        result = await callAIAnalysisAPI(
           productTypeForApi,
           sourcingRegion,
           'sourcing',
