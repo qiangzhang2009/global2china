@@ -1,39 +1,51 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+// Email API 路由
+// 使用 nodemailer 直接发送邮件
 
-export default async function handler(
-  request: VercelRequest,
-  response: VercelResponse
-) {
-  // 只允许 POST 请求
-  if (request.method !== 'POST') {
-    return response.status(405).json({ error: 'Method not allowed' });
+export default async function handler(req, res) {
+  // 设置 CORS 头
+  res.setHeader('Access-Control-Allow-Credentials', true)
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  )
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end()
+    return
   }
 
-  const { name, email, phone, company, message, inquiryType } = request.body;
+  // 只允许 POST 请求
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' })
+  }
+
+  const { name, email, phone, company, message, inquiryType } = req.body
 
   // 验证必填字段
   if (!name || !email || !message) {
-    return response.status(400).json({ error: 'Missing required fields' });
+    return res.status(400).json({ error: 'Missing required fields' })
   }
 
   // 获取环境变量中的邮件配置
-  const SMTP_HOST = process.env.SMTP_HOST;
-  const SMTP_PORT = process.env.SMTP_PORT;
-  const SMTP_USER = process.env.SMTP_USER;
-  const SMTP_PASS = process.env.SMTP_PASS;
-  const TO_EMAILS = process.env.TO_EMAILS || 'customer@zxqconsulting.com,3740977@qq.com';
+  const SMTP_HOST = process.env.SMTP_HOST
+  const SMTP_PORT = process.env.SMTP_PORT
+  const SMTP_USER = process.env.SMTP_USER
+  const SMTP_PASS = process.env.SMTP_PASS
+  const TO_EMAILS = process.env.TO_EMAILS || 'customer@zxqconsulting.com,3740977@qq.com'
 
   // 如果没有配置 SMTP，返回错误
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
-    return response.status(500).json({ error: 'Email service not configured' });
+    return res.status(500).json({ error: 'Email service not configured' })
   }
 
   // 构建邮件内容
-  const inquiryTypeLabels: Record<string, string> = {
+  const inquiryTypeLabels = {
     'sell-to-china': '卖到中国',
-    'sourcing': '采购/ sourcing',
+    'sourcing': '采购/sourcing',
     'other': '其他'
-  };
+  }
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -62,7 +74,7 @@ export default async function handler(
         </tr>
         <tr>
           <td style="padding: 10px; vertical-align: top; font-weight: bold;">询盘内容</td>
-          <td style="padding: 10px; vertical-align: top;">${message.replace(/\n/g, '<br>')}</td>
+          <td style="padding: 10px; vertical-align: top;">${(message || '').replace(/\n/g, '<br>')}</td>
         </tr>
       </table>
 
@@ -70,7 +82,7 @@ export default async function handler(
         此邮件由 Global2China 网站自动发送
       </p>
     </div>
-  `;
+  `
 
   const textContent = `
 新询盘通知 - Global2China
@@ -83,15 +95,10 @@ export default async function handler(
 
 询盘内容:
 ${message}
-  `;
+  `
 
   try {
-    // 使用 nodemailer 发送邮件（如果可用）
-    // 由于 Vercel serverless 函数限制，我们使用 API 方式发送
-    const recipientEmails = TO_EMAILS.split(',').map(e => e.trim());
-    
-    // 使用 Gmail SMTP 或其他 SMTP 服务发送邮件
-    const nodemailer = await import('nodemailer');
+    const nodemailer = await import('nodemailer')
     
     const transporter = nodemailer.createTransport({
       host: SMTP_HOST,
@@ -101,19 +108,21 @@ ${message}
         user: SMTP_USER,
         pass: SMTP_PASS,
       },
-    });
+    })
 
+    const recipientEmails = TO_EMAILS.split(',').map(e => e.trim())
+    
     await transporter.sendMail({
       from: `"Global2China" <${SMTP_USER}>`,
       to: recipientEmails.join(', '),
       subject: `🌏 新询盘通知 - ${name} - ${inquiryTypeLabels[inquiryType] || 'Global2China'}`,
       text: textContent,
       html: htmlContent,
-    });
+    })
 
-    return response.status(200).json({ success: true });
+    return res.status(200).json({ success: true })
   } catch (error) {
-    console.error('Email send error:', error);
-    return response.status(500).json({ error: 'Failed to send email' });
+    console.error('Email send error:', error)
+    return res.status(500).json({ error: 'Failed to send email' })
   }
 }
