@@ -71,8 +71,38 @@ async function callAIAnalysisAPI(
     throw new Error(data.error || 'AI analysis failed');
   }
 
+  // 解析 AI 返回的内容
+  let content = data.result.content;
+  
+  // 如果 content 是字符串，尝试解析为 JSON
+  let parsedContent = content;
+  if (typeof content === 'string') {
+    try {
+      // 尝试提取 JSON（可能有 markdown 代码块）
+      const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/);
+      if (jsonMatch) {
+        parsedContent = JSON.parse(jsonMatch[1]);
+      } else {
+        // 尝试直接解析
+        parsedContent = JSON.parse(content);
+      }
+    } catch (e) {
+      // 如果解析失败，直接返回原始内容作为 marketDemand.overall
+      parsedContent = {
+        marketDemand: {
+          overall: content,
+          regional: '',
+          targetCustomers: '',
+          growthTrend: ''
+        }
+      };
+    }
+  }
+
+  // 确保返回的数据包含所有必要的字段
   return {
-    content: data.result.content,
+    ...parsedContent,
+    content: content,
     productType: data.result.productType,
     targetRegion: data.result.targetRegion,
     mode: data.result.mode,
