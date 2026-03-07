@@ -159,6 +159,36 @@ const Tools = () => {
   };
 
   const handleAnalyze = async () => {
+    // 等待追踪脚本加载的辅助函数
+    const waitForTracker = (retries = 10): Promise<any> => {
+      return new Promise((resolve) => {
+        const check = (attempt: number) => {
+          if ((window as any).zxqTrack) {
+            resolve((window as any).zxqTrack);
+          } else if (attempt < retries) {
+            setTimeout(() => check(attempt + 1), 100);
+          } else {
+            resolve(null);
+          }
+        };
+        check(0);
+      });
+    };
+
+    // 开始分析，发送追踪事件
+    const startTime = Date.now();
+    const tracker = await waitForTracker();
+    if (tracker) {
+      tracker.toolStart('ai-analysis', {
+        analysis_mode: analysisMode,
+        product_type: productTypeForApi,
+        target_region: analysisMode === 'sell-to-china' ? chinaRegion : sourcingRegion,
+        selected_market: analysisMode === 'sourcing' ? selectedMarket : undefined,
+        user_role: userRoleId,
+        business_stage: businessStageId,
+      });
+    }
+
     setIsAnalyzing(true);
     setAnalysisResult(null);
     try {
@@ -199,9 +229,26 @@ const Tools = () => {
           }
         );
       }
+
+      // 分析完成，发送追踪事件
+      const duration = Date.now() - startTime;
+      if (tracker) {
+        tracker.toolComplete('ai-analysis', {
+          analysis_mode: analysisMode,
+          product_type: productTypeForApi,
+          target_region: analysisMode === 'sell-to-china' ? chinaRegion : sourcingRegion,
+          selected_market: analysisMode === 'sourcing' ? selectedMarket : undefined,
+          result_summary: result ? 'completed' : 'failed',
+        }, duration);
+      }
+
       setAnalysisResult(result);
     } catch (error) {
       console.error('Analysis error:', error);
+      // 分析失败，发送追踪事件
+      if (tracker) {
+        tracker.toolAbandon('ai-analysis', 0, 1);
+      }
     } finally {
       setIsAnalyzing(false);
     }

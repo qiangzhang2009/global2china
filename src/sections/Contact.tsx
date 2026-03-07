@@ -87,6 +87,18 @@ const Contact = () => {
 
       await Promise.all(sendPromises);
 
+      // 发送表单提交追踪事件
+      if (typeof window !== 'undefined' && (window as any).zxqTrack) {
+        (window as any).zxqTrack.form('inquiry', {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          inquiry_type: inquiryType,
+          message: formData.message,
+        }, 'success');
+      }
+
       toast.success(t('contact.success'));
       setFormData({ name: '', email: '', phone: '', company: '', message: '' });
     } catch (error) {
