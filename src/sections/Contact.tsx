@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mail, Phone, MapPin, Send, User } from 'lucide-react';
 import { toast } from 'sonner';
-import emailjs from '@emailjs/browser';
-import { emailConfig } from '@/lib/email';
 
 // 团队成员信息
 const teamMembers: { name: string; roleKey: string; phone: string; phoneLocal: string; email: string }[] = [
@@ -53,39 +51,27 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // 根据询盘类型发送到不同负责人
-      const getTargetEmails = () => {
-        if (inquiryType === 'sourcing') {
-          // 采购类 - 张强负责
-          return ['zxq@zxqconsulting.com'];
-        }
-        // 卖到中国和其他 - 全部负责人
-        return emailConfig.toEmails;
-      };
-
-      const targetEmails = getTargetEmails();
-
-      // 发送邮件
-      const sendPromises = targetEmails.map(async (toEmail) => {
-        const templateParams = {
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone || '未填写',
-          company: formData.company || '未填写',
-          message: `【询盘类型】${inquiryTypes.find(t => t.id === inquiryType)?.labelKey ? t(inquiryTypes.find(t => t.id === inquiryType)?.labelKey || '') : ''}\n\n${formData.message}`,
-          inquiry_type: inquiryTypes.find(t => t.id === inquiryType)?.labelKey ? t(inquiryTypes.find(t => t.id === inquiryType)?.labelKey || '') : '',
-          to_email: toEmail,
-        };
-
-        return emailjs.send(
-          emailConfig.serviceId,
-          emailConfig.templateId,
-          templateParams,
-          emailConfig.publicKey
-        );
+      // 调用后端 API 发送邮件
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          message: formData.message,
+          inquiryType: inquiryType,
+        }),
       });
 
-      await Promise.all(sendPromises);
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to send email');
+      }
 
       // 发送表单提交追踪事件
       if (typeof window !== 'undefined' && (window as any).zxqTrack) {
