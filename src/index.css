@@ -1,0 +1,296 @@
+/* ==========================================================================
+   🎨 Global2China - 进口服务网站色彩系统 V1.0
+   基于色彩心理学与视觉心理学设计
+   包含：信任蓝、专业金、活力橙、健康绿
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   🎨 色彩系统 - 多维情感引导
+   ========================================================================== */
+
+:root {
+  /* 🌟 主品牌色系 - 温暖的棕金色（信任+温暖+专业） */
+  --primary-50: #fefdfb;
+  --primary-100: #faf5ed;
+  --primary-200: #f5e8d5;
+  --primary-300: #ecd5ac;
+  --primary-400: #e2bd7e;
+  --primary-500: #d4a05a;
+  --primary-600: #c48a45;
+  --primary-700: #a36d36;
+  --primary-800: #8b5a2f;
+  --primary-900: #5c3d26;
+
+  /* 🌊 辅助色系 - 深海蓝（专业+冷静+信任） */
+  --accent-50: #f0f7ff;
+  --accent-100: #e0e9ff;
+  --accent-200: #c7d6fe;
+  --accent-300: #a4b9fc;
+  --accent-400: #7d91f5;
+  --accent-500: #5b6ee8;
+  --accent-600: #4251c7;
+  --accent-700: #3341a0;
+  --accent-800: #2a3481;
+  --accent-900: #1e2458;
+
+  /* 🟣 AI智能色系 - 智慧+创新+科技 */
+  --ai-50: #f5f3ff;
+  --ai-100: #ede9fe;
+  --ai-200: #ddd6fe;
+  --ai-300: #c4b5fd;
+  --ai-400: #a78bfa;
+  --ai-500: #8b5cf6;
+  --ai-600: #7c3aed;
+  --ai-700: #6d28d9;
+  --ai-800: #5b21b6;
+  --ai-900: #4c1d95;
+
+  /* 🌿 健康绿色系 - 自然+增长+进口 */
+  --health-50: #ecfdf5;
+  --health-100: #d1fae5;
+  --health-200: #a7f3d0;
+  --health-300: #6ee7b7;
+  --health-400: #34d399;
+  --health-500: #10b981;
+  --health-600: #059669;
+  --health-700: #047857;
+  --health-800: #065f46;
+  --health-900: #064e3b;
+
+  /* 🔥 活力橙色系 - 机遇+行动+能量 */
+  --energy-50: #fff7ed;
+  --energy-100: #ffedd5;
+  --energy-200: #fed7aa;
+  --energy-300: #fdba74;
+  --energy-400: #fb923c;
+  --energy-500: #f97316;
+  --energy-600: #ea580c;
+  --energy-700: #c2410c;
+  --energy-800: #9a3412;
+  --energy-900: #7c2d12;
+
+  /* 🎭 中性色系 - 高级灰 */
+  --white: #ffffff;
+  --gray-50: #fafaf9;
+  --gray-100: #f5f5f4;
+  --gray-200: #e7e5e4;
+  --gray-300: #d6d3d1;
+  --gray-400: #a8a29e;
+  --gray-500: #78716c;
+  --gray-600: #57534e;
+  --gray-700: #44403c;
+  --gray-800: #292524;
+  --gray-900: #1c1917;
+
+  /* 📐 品牌渐变组合 */
+  --gradient-primary: linear-gradient(135deg,
+    var(--primary-500) 0%,
+    var(--primary-600) 50%,
+    var(--primary-700) 100%);
+
+  --gradient-hero: linear-gradient(180deg,
+    var(--gray-50) 0%,
+    var(--primary-50) 30%,
+    var(--health-50) 70%,
+    var(--gray-50) 100%);
+
+  --gradient-import: linear-gradient(135deg,
+    var(--accent-500) 0%,
+    var(--accent-600) 50%,
+    var(--accent-700) 100%);
+
+  /* 📏 间距系统 */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* 🎯 阴影系统 */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.15);
+
+  /* 📐 圆角系统 */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  /* 🖥️ 容器宽度 */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+}
+
+/* ==========================================================================
+   🌈 语义化色彩映射 - 适配 shadcn/ui
+   ========================================================================== */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 24 10% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 24 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 24 10% 10%;
+    --primary: 38 55% 56%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 60% 55%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 24 10% 96%;
+    --muted-foreground: 24 5% 45%;
+    --accent: 160 65% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 24 10% 90%;
+    --input: 24 10% 90%;
+    --ring: 38 55% 56%;
+    --radius: 0.75rem;
+  }
+}
+
+/* ==========================================================================
+   🏗️ 基础样式重置
+   ========================================================================== */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Noto Sans SC', 'Noto Serif SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Noto Serif SC', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}
+
+/* ==========================================================================
+   🎨 工具类
+   ========================================================================== */
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--accent-500), var(--health-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* ==========================================================================
+   🖌️ 自定义组件样式
+   ========================================================================== */
+
+/* 导航栏样式 */
+.navbar-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* 卡片悬停效果 */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 按钮悬停效果 */
+.btn-primary {
+  background: var(--primary-500);
+  color: white;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background: var(--primary-600);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 渐变背景 */
+.bg-import-gradient {
+  background: linear-gradient(135deg, var(--accent-50) 0%, var(--health-50) 50%, var(--gray-50) 100%);
+}
+
+/* 分割线 */
+.divider-gradient {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-400), transparent);
+}
+
+/* 动画入场 */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 交错动画 */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
