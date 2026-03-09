@@ -101,7 +101,6 @@ export async function track(
     // 使用 zxqTrack 的通用事件追踪
     tracker.track?.(eventType, {
       ...params,
-      event_type: eventType,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
