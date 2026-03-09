@@ -4,7 +4,8 @@
    包含：信任蓝、专业金、活力橙、健康绿
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
+/* 中文使用系统默认字体，英文使用系统字体（国内推荐） */
+@import url('https://cdn.staticfile.org/noto-sans-sc/34.1.0/noto-sans-sc.min.css');
 
 @tailwind base;
 @tailwind components;
