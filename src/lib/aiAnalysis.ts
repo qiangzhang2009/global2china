@@ -24,21 +24,105 @@ export const LANGUAGE_NAMES: Record<string, string> = {
 };
 
 // 多语言翻译函数 - 用于生成联系我们的多语言内容
-export function getContactUsContent(lang: string = 'zh'): { title: string; description: string; cta: string; 事务所名称: string } {
+export function getContactUsContent(lang: string = 'zh'): { 
+  title: string; 
+  description: string; 
+  cta: string; 
+  事务所名称: string;
+  valueProposition?: {
+    problems: string[];      // 我们能解决的问题
+    services: string[];       // 我们提供的服务
+    benefits: string[];       // 用户获得的价值
+    process: string[];        // 服务流程
+  };
+} {
   const isZh = lang === 'zh';
   
-  const content: Record<string, { title: string; description: string; cta: string; 事务所名称: string }> = {
+  const content: Record<string, { 
+    title: string; 
+    description: string; 
+    cta: string; 
+    事务所名称: string;
+    valueProposition?: {
+      problems: string[];
+      services: string[];
+      benefits: string[];
+      process: string[];
+    };
+  }> = {
     zh: {
       title: '需要更专业的支持？',
       description: '我们的专业团队拥有多年跨境贸易经验，可为您提供从市场调研、准入咨询到渠道对接的全流程服务，帮助您避免常见陷阱，节省时间和成本。',
       cta: '立即咨询我们',
       事务所名称: '上海张小强企业咨询事务所',
+      valueProposition: {
+        problems: [
+          '不清楚产品能否合法进入中国市场',
+          '不知道需要哪些资质和认证',
+          '担心清关被扣或不合规被罚',
+          '找不到合适的采购渠道',
+          '不了解目标市场需求和定价',
+          '担心首批采购后卖不出去',
+        ],
+        services: [
+          '产品准入合规分析',
+          '资质认证代办服务',
+          '采购渠道对接',
+          '清关物流安排',
+          '市场调研报告',
+          '渠道销售对接',
+        ],
+        benefits: [
+          '合规准入有保障',
+          '降低首批试错成本',
+          '缩短进入市场周期',
+          '获取更优采购价格',
+          '专业团队全程指导',
+        ],
+        process: [
+          '1对1需求沟通',
+          '产品准入评估',
+          '制定进口方案',
+          '执行落地服务',
+        ],
+      },
     },
     en: {
       title: 'Need Professional Support?',
       description: 'Our team with years of cross-border trade experience can provide you with full-process services from market research and compliance consulting to channel matching, helping you save time and costs while avoiding common pitfalls.',
       cta: 'Contact Us Now',
       事务所名称: 'Shanghai Zhang Xiaoqiang Consulting Firm',
+      valueProposition: {
+        problems: [
+          'Unsure if your product can legally enter China',
+          'Don\'t know what certifications are needed',
+          'Worry about customs detention or penalties',
+          'Can\'t find suitable sourcing channels',
+          'Don\'t understand target market demand and pricing',
+          'Worried about unsold inventory from first shipment',
+        ],
+        services: [
+          'Product compliance analysis',
+          'Certification application services',
+          'Sourcing channel matching',
+          'Customs and logistics arrangement',
+          'Market research reports',
+          'Channel sales matching',
+        ],
+        benefits: [
+          'Guaranteed compliance access',
+          'Reduce first-trial error costs',
+          'Shorten time to market',
+          'Get better sourcing prices',
+          'Professional team full guidance',
+        ],
+        process: [
+          '1-on-1 needs assessment',
+          'Product compliance evaluation',
+          'Import solution planning',
+          'Execution support services',
+        ],
+      },
     },
     ja: {
       title: 'プロフェッショナルなサポートが必要ですか？',
@@ -124,6 +208,15 @@ export const BUSINESS_STAGES = [
   { id: 'experienced', name: '已有进口经验', desc: '希望优化或拓展品类/区域', icon: '📈' },
 ] as const;
 
+// 核心痛点/关注点 - 帮助 AI 调整输出重点（选填）
+export const CORE_PAIN_POINTS = [
+  { id: 'compliance', name: '合规准入', desc: '关心产品能否合法进入、注册流程与成本', icon: '⚖️' },
+  { id: 'profit', name: '盈利测算', desc: '关心投入产出比、回本周期、利润空间', icon: '💰' },
+  { id: 'product-fit', name: '产品适配', desc: '关心产品是否适合当地市场、是否需要改造', icon: '📦' },
+  { id: 'channel', name: '渠道落地', desc: '关心如何把产品铺到消费者手里', icon: '🛒' },
+  { id: 'risk', name: '风险管控', desc: '关心有哪些坑、如何规避潜在风险', icon: '🛡️' },
+] as const;
+
 // 中国目标区域（卖到中国模式使用）
 export const CHINA_REGIONS = [
   { id: 'east-china', name: '华东地区', cities: '上海、江苏、浙江', desc: '经济发达，消费力强，进口商品认可度高', icon: '🏙️' },
@@ -191,7 +284,13 @@ export interface AnalysisResult {
     title: string;           // 区块标题
     description: string;      // 描述
     cta: string;             // 行动号召按钮文字
-   事务所名称: string;          // 联系我们的事务所
+    事务所名称: string;          // 联系我们的事务所
+    valueProposition?: {
+      problems: string[];      // 我们能解决的问题
+      services: string[];       // 我们提供的服务
+      benefits: string[];       // 用户获得的价值
+      process: string[];        // 服务流程
+    };
   };
 }
 
@@ -211,6 +310,7 @@ export async function analyzeWithAI(
     countryRegion?: string;
     userRole?: string;           // 用户身份（USER_ROLES 的 name），选填
     businessStage?: string;       // 当前业务阶段（BUSINESS_STAGES 的 name），选填
+    painPoints?: string[];        // 核心痛点（CORE_PAIN_POINTS 的 name），选填
     language?: string;            // 当前语言代码，用于返回对应语言的分析结果
   }
 ): Promise<AnalysisResult> {
@@ -222,6 +322,7 @@ export async function analyzeWithAI(
   const countryRegion = options?.countryRegion || '';
   const userRole = options?.userRole || '';
   const businessStage = options?.businessStage || '';
+  const painPoints = options?.painPoints || [];
   const language = options?.language || 'zh';
 
   const hasUserContext = Boolean(userRole || businessStage);
@@ -230,6 +331,14 @@ export async function analyzeWithAI(
 【用户身份与阶段】（请据此调整分析深度与下一步建议的针对性）
 - 用户身份：${userRole || '未选择'}
 - 当前业务阶段：${businessStage || '未选择'}
+`
+    : '';
+
+  // 核心痛点/关注点
+  const painPointsBlock = painPoints.length > 0
+    ? `
+【核心关注点】（AI将重点分析以下内容）
+- 用户关心的核心问题：${painPoints.join('、')}
 `
     : '';
 
@@ -267,7 +376,7 @@ ${categoryLevel1Name ? `- 一级分类：${categoryLevel1Name}` : ''}`;
 
 ${productAndAudienceBlock}
 ${userContextBlock}
-
+${painPointsBlock}
 【用户选择的其他关键信息】
 - 目标销售区域: ${targetRegion}
 ${countryRegion ? `- 产品来源地区: ${countryRegion}` : ''}
@@ -321,7 +430,7 @@ ${langInstruction}
 
 ${productAndAudienceBlock}
 ${userContextBlock}
-
+${painPointsBlock}
 【用户选择的其他关键信息】
 - 采购来源地区: ${originRegion || targetRegion}
 ${countryName ? `- 采购目标国家: ${countryName}` : ''}

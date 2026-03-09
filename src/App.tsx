@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from './sections/Navbar';
 import Hero from './sections/Hero';
+import { trackPageView, trackScrollDepth, trackSectionView } from './lib/tracking';
 
 // 懒加载下面不需要首屏渲染的组件
 const Services = lazy(() => import('./sections/Services'));
@@ -22,6 +23,64 @@ const LoadingPlaceholder = () => (
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
+  // 页面浏览追踪
+  useEffect(() => {
+    trackPageView('首页');
+  }, []);
+
+  // 滚动深度追踪
+  useEffect(() => {
+    let maxScrollPercent = 0;
+    const scrollThresholds = [25, 50, 75, 100];
+    const trackedThresholds = new Set<number>();
+
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = Math.round((scrollTop / docHeight) * 100);
+      
+      // 更新最大滚动深度
+      if (scrollPercent > maxScrollPercent) {
+        maxScrollPercent = scrollPercent;
+      }
+      
+      // 检查是否达到新的阈值
+      scrollThresholds.forEach((threshold) => {
+        if (maxScrollPercent >= threshold && !trackedThresholds.has(threshold)) {
+          trackedThresholds.add(threshold);
+          trackScrollDepth(threshold);
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 区块浏览追踪
+  useEffect(() => {
+    const sectionIds = ['hero', 'services', 'tools', 'about', 'contact'];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const sectionId = entry.target.id;
+            const sectionName = sectionIds.find(id => sectionId.includes(id)) || sectionId;
+            trackSectionView(sectionId, sectionName);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    sectionIds.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const sections = document.querySelectorAll('.animate-on-scroll');
 

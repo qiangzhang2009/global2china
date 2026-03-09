@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mail, Phone, MapPin, Send, User } from 'lucide-react';
 import { toast } from 'sonner';
+import { trackFormSubmit } from '@/lib/tracking';
 
 // 团队成员信息
 const teamMembers: { name: string; roleKey: string; phone: string; phoneLocal: string; email: string }[] = [
@@ -74,16 +75,15 @@ const Contact = () => {
       }
 
       // 发送表单提交追踪事件
-      if (typeof window !== 'undefined' && (window as any).zxqTrack) {
-        (window as any).zxqTrack.form('inquiry', {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          company: formData.company,
-          inquiry_type: inquiryType,
-          message: formData.message,
-        }, 'success');
-      }
+      // 发送表单提交追踪事件
+      await trackFormSubmit('inquiry', 'contact-form', {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        inquiry_type: inquiryType,
+        message: formData.message,
+      });
 
       toast.success(t('contact.success'));
       setFormData({ name: '', email: '', phone: '', company: '', message: '' });

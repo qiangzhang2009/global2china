@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -29,9 +29,17 @@ import {
   CHINA_REGIONS,
   USER_ROLES,
   BUSINESS_STAGES,
+  CORE_PAIN_POINTS,
   AnalysisMode,
   AnalysisResult,
 } from '@/lib/aiAnalysis';
+import { 
+  trackClick, 
+  trackAIStart, 
+  trackAIComplete, 
+  trackAIAbandon,
+  trackSectionView 
+} from '@/lib/tracking';
 
 // 调用后端 API 进行 AI 分析
 async function callAIAnalysisAPI(
@@ -48,6 +56,7 @@ async function callAIAnalysisAPI(
     countryRegion?: string;
     userRole?: string;
     businessStage?: string;
+    painPoints?: string[];
     language?: string;
   }
 ): Promise<AnalysisResult> {
@@ -192,6 +201,7 @@ const Tools = () => {
   const [selectedMarket, setSelectedMarket] = useState('japan');
   const [userRoleId, setUserRoleId] = useState<string>('');
   const [businessStageId, setBusinessStageId] = useState<string>('');
+  const [selectedPainPoints, setSelectedPainPoints] = useState<string[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 
@@ -206,10 +216,17 @@ const Tools = () => {
     const cat = PRODUCT_CATEGORIES.find((c) => c.id === id);
     const firstChildId = cat?.children?.[0]?.id ?? '';
     setProductLevel2(firstChildId);
+    trackClick('ai-analysis', 'select_category_l1', id);
+  };
+
+  const handleProductLevel2Change = (id: string) => {
+    setProductLevel2(id);
+    trackClick('ai-analysis', 'select_category_l2', id);
   };
 
   const handleChinaRegionChange = (regionId: string) => {
     setChinaRegion(regionId);
+    trackClick('ai-analysis', 'select_china_region', regionId);
   };
 
   const handleSourcingRegionChange = (regionId: string) => {
@@ -219,6 +236,12 @@ const Tools = () => {
     if (!markets.find((m: { id: string }) => m.id === selectedMarket)) {
       setSelectedMarket(firstMarketId);
     }
+    trackClick('ai-analysis', 'select_sourcing_region', regionId);
+  };
+
+  const handleMarketChange = (marketId: string) => {
+    setSelectedMarket(marketId);
+    trackClick('ai-analysis', 'select_market', marketId);
   };
 
   const productTypeForApi = getProductTypeFromCategory(productLevel1, productLevel2);
@@ -247,38 +270,20 @@ const Tools = () => {
   };
 
   const handleAnalyze = async () => {
-    // 等待追踪脚本加载的辅助函数
-    const waitForTracker = (retries = 10): Promise<any> => {
-      return new Promise((resolve) => {
-        const check = (attempt: number) => {
-          if ((window as any).zxqTrack) {
-            resolve((window as any).zxqTrack);
-          } else if (attempt < retries) {
-            setTimeout(() => check(attempt + 1), 100);
-          } else {
-            resolve(null);
-          }
-        };
-        check(0);
-      });
-    };
-
     // 开始分析，发送追踪事件
     const startTime = Date.now();
-    const tracker = await waitForTracker();
-    if (tracker) {
-      tracker.toolStart('ai-analysis', {
-        analysis_mode: analysisMode,
-        product_type: productTypeForApi,
-        product_name: getProductName(),
-        category_level1: getCategoryLevel1Name(),
-        category_level2: getCategoryLevel2Name(),
-        target_region: analysisMode === 'sell-to-china' ? chinaRegion : sourcingRegion,
-        selected_market: analysisMode === 'sourcing' ? selectedMarket : undefined,
-        user_role: userRoleId,
-        business_stage: businessStageId,
-      });
-    }
+    
+    // 使用新的追踪工具发送AI分析开始事件
+    await trackAIStart(analysisMode, {
+      productType: productTypeForApi,
+      productName: getProductName(),
+      categoryLevel1: getCategoryLevel1Name(),
+      categoryLevel2: getCategoryLevel2Name(),
+      targetRegion: analysisMode === 'sell-to-china' ? chinaRegion : sourcingRegion,
+      selectedMarket: analysisMode === 'sourcing' ? selectedMarket : undefined,
+      userRole: userRoleId ? USER_ROLES.find((r) => r.id === userRoleId)?.name : undefined,
+      businessStage: businessStageId ? BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name : undefined,
+    });
 
     setIsAnalyzing(true);
     setAnalysisResult(null);
@@ -298,6 +303,7 @@ const Tools = () => {
             countryRegion: getCountryRegionName(),
             userRole: userRoleId ? USER_ROLES.find((r) => r.id === userRoleId)?.name : undefined,
             businessStage: businessStageId ? BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name : undefined,
+            painPoints: selectedPainPoints.length > 0 ? selectedPainPoints.map(id => CORE_PAIN_POINTS.find(p => p.id === id)?.name).filter(Boolean) : undefined,
             language: currentLanguage,
           }
         );
@@ -316,6 +322,7 @@ const Tools = () => {
             countryRegion: getCountryRegionName(),
             userRole: userRoleId ? USER_ROLES.find((r) => r.id === userRoleId)?.name : undefined,
             businessStage: businessStageId ? BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name : undefined,
+            painPoints: selectedPainPoints.length > 0 ? selectedPainPoints.map(id => CORE_PAIN_POINTS.find(p => p.id === id)?.name).filter(Boolean) : undefined,
             language: currentLanguage,
           }
         );
@@ -323,30 +330,25 @@ const Tools = () => {
 
       // 分析完成，发送追踪事件
       const duration = Date.now() - startTime;
-      if (tracker) {
-        tracker.toolComplete('ai-analysis', {
-          analysis_mode: analysisMode,
-          product_type: productTypeForApi,
-          product_name: getProductName(),
-          category_level1: getCategoryLevel1Name(),
-          category_level2: getCategoryLevel2Name(),
-          target_region: analysisMode === 'sell-to-china' ? chinaRegion : sourcingRegion,
-          selected_market: analysisMode === 'sourcing' ? selectedMarket : undefined,
-          user_role: userRoleId ? USER_ROLES.find((r) => r.id === userRoleId)?.name : undefined,
-          business_stage: businessStageId ? BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name : undefined,
-          result_summary: result ? 'completed' : 'failed',
-          ai_result_content: result?.content ? result.content.substring(0, 500) : undefined, // 保存前500字
-          ai_result_length: result?.content?.length || 0,
-        }, duration);
-      }
+      await trackAIComplete(analysisMode, duration, {
+        productType: productTypeForApi,
+        productName: getProductName(),
+        categoryLevel1: getCategoryLevel1Name(),
+        categoryLevel2: getCategoryLevel2Name(),
+        targetRegion: analysisMode === 'sell-to-china' ? chinaRegion : sourcingRegion,
+        selectedMarket: analysisMode === 'sourcing' ? selectedMarket : undefined,
+        userRole: userRoleId ? USER_ROLES.find((r) => r.id === userRoleId)?.name : undefined,
+        businessStage: businessStageId ? BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name : undefined,
+        resultSummary: result ? 'completed' : 'failed',
+        aiResultContent: result?.content,
+        aiResultLength: result?.content?.length || 0,
+      });
 
       setAnalysisResult(result);
     } catch (error) {
       console.error('Analysis error:', error);
       // 分析失败，发送追踪事件
-      if (tracker) {
-        tracker.toolAbandon('ai-analysis', 0, 1);
-      }
+      await trackAIAbandon(analysisMode, 0, error instanceof Error ? error.message : 'unknown');
     } finally {
       setIsAnalyzing(false);
     }
@@ -405,7 +407,10 @@ const Tools = () => {
                   {ANALYSIS_MODES.map((mode) => (
                     <button
                       key={mode.id}
-                      onClick={() => setAnalysisMode(mode.id as AnalysisMode)}
+                      onClick={() => {
+                        setAnalysisMode(mode.id as AnalysisMode);
+                        trackClick('ai-analysis', 'select_mode', mode.id);
+                      }}
                       className={cn(
                         'p-4 rounded-xl border-2 transition-all text-left',
                         analysisMode === mode.id
@@ -441,7 +446,10 @@ const Tools = () => {
                         <button
                           key={role.id}
                           type="button"
-                          onClick={() => setUserRoleId(userRoleId === role.id ? '' : role.id)}
+                          onClick={() => {
+                            setUserRoleId(userRoleId === role.id ? '' : role.id);
+                            trackClick('ai-analysis', 'select_user_role', role.id);
+                          }}
                           className={cn(
                             'px-3 py-2 rounded-xl text-xs font-medium transition-all border-2 flex items-center gap-1.5',
                             userRoleId === role.id
@@ -462,7 +470,10 @@ const Tools = () => {
                         <button
                           key={stage.id}
                           type="button"
-                          onClick={() => setBusinessStageId(businessStageId === stage.id ? '' : stage.id)}
+                          onClick={() => {
+                            setBusinessStageId(businessStageId === stage.id ? '' : stage.id);
+                            trackClick('ai-analysis', 'select_business_stage', stage.id);
+                          }}
                           className={cn(
                             'px-3 py-2 rounded-xl text-xs font-medium transition-all border-2 flex items-center gap-1.5',
                             businessStageId === stage.id
@@ -475,6 +486,40 @@ const Tools = () => {
                         </button>
                       ))}
                     </div>
+                  </div>
+                </div>
+
+                {/* 核心痛点/关注点选择 */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-600 text-xs font-bold flex items-center justify-center">?</span>
+                    <label className="text-sm font-semibold text-gray-700">{t('tools.painPoints') || '核心关注点（可选）'}</label>
+                    <span className="text-xs text-gray-400">{t('tools.painPointsHint') || '选择您最关心的问题，AI将重点分析'}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {CORE_PAIN_POINTS.map((point) => (
+                      <button
+                        key={point.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedPainPoints(prev => 
+                            prev.includes(point.id) 
+                              ? prev.filter(id => id !== point.id)
+                              : [...prev, point.id]
+                          );
+                          trackClick('ai-analysis', 'select_pain_point', point.id);
+                        }}
+                        className={cn(
+                          'px-3 py-2 rounded-xl text-xs font-medium transition-all border-2 flex items-center gap-1.5',
+                          selectedPainPoints.includes(point.id)
+                            ? 'border-violet-500 bg-violet-50 text-violet-700'
+                            : 'border-gray-100 bg-gray-50 text-gray-600 hover:border-violet-200'
+                        )}
+                      >
+                        <span>{point.icon}</span>
+                        <span>{point.name}</span>
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -511,7 +556,7 @@ const Tools = () => {
                     {productLevel2Options.map((item) => (
                       <button
                         key={item.id}
-                        onClick={() => setProductLevel2(item.id)}
+                        onClick={() => handleProductLevel2Change(item.id)}
                         className={cn(
                           'px-4 py-2.5 rounded-xl text-sm font-medium transition-all border-2',
                           productLevel2 === item.id
@@ -596,7 +641,7 @@ const Tools = () => {
                         {availableMarkets.map((market: { id: string; name: string; flag: string; tag?: string }) => (
                           <button
                             key={market.id}
-                            onClick={() => setSelectedMarket(market.id)}
+                            onClick={() => handleMarketChange(market.id)}
                             className={cn(
                               'px-3 py-3 rounded-xl text-sm font-medium transition-all border-2 flex flex-col items-center gap-1 relative',
                               selectedMarket === market.id
@@ -881,29 +926,129 @@ const Tools = () => {
                 
                 {/* 联系我们区块 */}
                 {analysisResult.contactUs && (
-                  <div className="mt-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-100">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
-                        <span className="text-2xl">💼</span>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">
-                          {analysisResult.contactUs.title}
-                        </h4>
-                        <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-                          {analysisResult.contactUs.description}
-                        </p>
-                        <div className="flex flex-wrap items-center gap-4">
-                          <a
-                            href="#contact"
-                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-semibold text-sm hover:shadow-lg hover:shadow-amber-500/25 transition-all"
-                          >
-                            {analysisResult.contactUs.cta}
-                            <ArrowRight className="w-4 h-4" />
-                          </a>
-                          <span className="text-xs text-gray-500">
-                            {analysisResult.contactUs.事务所名称}
-                          </span>
+                  <div className="mt-8">
+                    {/* 价值引导主标题 */}
+                    <div className="text-center mb-6">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        {currentLanguage === 'zh' ? '我们能为您做什么？' : 'What We Can Do For You?'}
+                      </h3>
+                      <p className="text-gray-500 text-sm">
+                        {currentLanguage === 'zh' 
+                          ? '从产品准入到市场销售，我们提供全流程服务' 
+                          : 'From product compliance to market sales, we provide full-process services'}
+                      </p>
+                    </div>
+
+                    {/* 四大核心价值卡片 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      {/* 问题 - 我们能解决的问题 */}
+                      {analysisResult.contactUs.valueProposition?.problems && (
+                        <div className="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl p-5 border border-red-100">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-xl">😰</span>
+                            <h4 className="font-bold text-gray-900 text-sm">
+                              {currentLanguage === 'zh' ? '您可能面临的问题' : 'Problems You May Face'}
+                            </h4>
+                          </div>
+                          <ul className="space-y-2">
+                            {analysisResult.contactUs.valueProposition.problems.slice(0, 4).map((problem, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-xs text-gray-600">
+                                <span className="text-red-400 mt-0.5">•</span>
+                                {problem}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* 服务 - 我们提供的服务 */}
+                      {analysisResult.contactUs.valueProposition?.services && (
+                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 border border-blue-100">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-xl">🛠️</span>
+                            <h4 className="font-bold text-gray-900 text-sm">
+                              {currentLanguage === 'zh' ? '我们提供的服务' : 'Services We Provide'}
+                            </h4>
+                          </div>
+                          <ul className="space-y-2">
+                            {analysisResult.contactUs.valueProposition.services.slice(0, 4).map((service, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-xs text-gray-600">
+                                <span className="text-blue-500 mt-0.5">✓</span>
+                                {service}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* 价值 - 用户获得的价值 */}
+                      {analysisResult.contactUs.valueProposition?.benefits && (
+                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-100">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-xl">✨</span>
+                            <h4 className="font-bold text-gray-900 text-sm">
+                              {currentLanguage === 'zh' ? '您将获得的价值' : 'Value You Will Get'}
+                            </h4>
+                          </div>
+                          <ul className="space-y-2">
+                            {analysisResult.contactUs.valueProposition.benefits.slice(0, 4).map((benefit, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-xs text-gray-600">
+                                <span className="text-green-500 mt-0.5">★</span>
+                                {benefit}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* 流程 - 服务流程 */}
+                      {analysisResult.contactUs.valueProposition?.process && (
+                        <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl p-5 border border-purple-100">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-xl">🚀</span>
+                            <h4 className="font-bold text-gray-900 text-sm">
+                              {currentLanguage === 'zh' ? '服务流程' : 'Service Process'}
+                            </h4>
+                          </div>
+                          <ul className="space-y-2">
+                            {analysisResult.contactUs.valueProposition.process.slice(0, 4).map((step, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-xs text-gray-600">
+                                <span className="w-5 h-5 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                                  {idx + 1}
+                                </span>
+                                {step}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 行动号召 */}
+                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-100">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+                          <span className="text-2xl">💼</span>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-lg font-bold text-gray-900 mb-2">
+                            {analysisResult.contactUs.title}
+                          </h4>
+                          <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+                            {analysisResult.contactUs.description}
+                          </p>
+                          <div className="flex flex-wrap items-center gap-4">
+                            <a
+                              href="#contact"
+                              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl font-semibold text-sm hover:shadow-lg hover:shadow-amber-500/25 transition-all"
+                            >
+                              {analysisResult.contactUs.cta}
+                              <ArrowRight className="w-4 h-4" />
+                            </a>
+                            <span className="text-xs text-gray-500">
+                              {analysisResult.contactUs.事务所名称}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
