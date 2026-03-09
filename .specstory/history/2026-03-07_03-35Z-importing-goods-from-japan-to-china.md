@@ -13834,3 +13834,192 @@ Tool use: **read_file_v2**
 
 ---
 
+<think>
+The issue is that the AI is returning incomplete or malformed JSON. The best solution is to improve the backend prompt to force proper JSON output. Let me update the API to use a more robust prompt that explicitly instructs the AI to return valid JSON.
+
+Let me also add a fallback in the
+</think>
+
+让我改进后端 API，强制 AI 返回正确的 JSON  API to return default data when JSON parsing fails, and improve the frontend parsing.格式：
+
+
+---
+
+Tool use: **read_file_v2**
+
+---
+
+<think>
+I see that the API is using a simple prompt. The issue is that the AI returns text that is not valid JSON. Let me improve the API prompt to force the AI to return valid JSON, and add better error handling on the frontend.
+
+First, let me update the backend to use a more structured prompt that forces JSON output.
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+Now
+</think>
+
+现在让我改进前 let me also improve the frontend parsing to be more robust - try to fix common JSON issues and fallback to default data if parsing still fails.端的解析逻辑，增加更多的容错处理：
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+Now let me rebuild and redeploy.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+Build succeeded. Let me wait for deployment to complete.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+Let me check the deployment status.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+The
+</think>
+
+已完成改进并部署！主要修改：
+
+1. **后 deployment is ready. Let me tell the user.端 API** - 改进了提示词，明确要求 AI 返回严格格式的 JSON
+2. **前端解析** - 增强了容错处理，即使 JSON 解析失败也能显示内容
+
+新版本: https://import-website-eko0w1v57-johnzhangs-projects-50e83ec4.vercel.app
+
+请刷新网站再次测试 AI 分析功能。
+
+---
+
+_**User**_
+
+请提交部署更新，以后你能完成的工作任务尽可能不让我来做
+
+---
+
+_**Assistant (claude-4.6-opus-max-thinking)**_
+
+<think>
+The user wants me to commit the changes and continue deploying updates without requiring their involvement. Let me first check the git status and then commit the changes.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+Now let me add and commit the changes.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+Now let me push the changes to the remote and deploy to Vercel.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+Done
+</think>
+
+已完成提交和部署！
+
+**提交内容! The deployment is complete. Let me provide a summary to the user.**:
+- 隐藏 Markets（进口来源市场）版块
+- 改进 AI 分析 JSON 解析逻辑
+
+**生产环境**: https://import-website-iov5q9w84-johnzhangs-projects-50e83ec4.vercel.app
+
+自定义域名 `https://global2china.zxqconsulting.com/` 会自动指向新版本。
+
+以后我会自动完成提交和部署工作，你只需测试功能即可。
+
+---
+
+_**User**_
+
+请把智能分析下面的 六个展示模块 删掉好像没啥用，第一个是 ”市场深度分析
+基于AI算法分析中国市场需求、竞争格局与价格趋势
+
+了解更多“，等
+
+---
+
+_**Assistant (claude-4.6-opus-max-thinking)**_
+
+<think>
+The user wants to remove the six display modules under the AI analysis tool section. Let me find these components in the Tools.tsx file.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let me search for the English text or other patterns.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let me find the keys in i18n.ts.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Now let me find the Tools section in the code to see where these 6 cards are rendered. The user wants to remove the cards under the AI analysis tool.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Now I see the tools array. Let me check how many items are in this array and find where it's rendered. The user wants to remove the display modules below the AI analysis, which seem to be the tool cards. Let me see how many items there are.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+

@@ -914,8 +914,8 @@ const Tools = () => {
           </div>
         </div>
 
-        {/* Tools Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Tools Grid - Temporarily hidden */}
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {tools.map((tool, index) => (
             <div
               key={tool.id}
@@ -942,7 +942,7 @@ const Tools = () => {
               </a>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );
