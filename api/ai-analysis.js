@@ -38,6 +38,7 @@ export default async function handler(req, res) {
   const countryRegion = options?.countryRegion || ''
   const userRole = options?.userRole || ''
   const businessStage = options?.businessStage || ''
+  const painPoints = options?.painPoints || []
   const language = options?.language || 'zh'
 
   const hasUserContext = Boolean(userRole || businessStage)
@@ -46,6 +47,14 @@ export default async function handler(req, res) {
 【用户身份与阶段】（请据此调整分析深度与下一步建议的针对性）
 - 用户身份：${userRole || '未选择'}
 - 当前业务阶段：${businessStage || '未选择'}
+`
+    : ''
+
+  // 核心痛点/关注点
+  const painPointsBlock = painPoints.length > 0
+    ? `
+【核心关注点】（AI将重点分析以下内容）
+- 用户关心的核心问题：${painPoints.join('、')}
 `
     : ''
 
@@ -79,6 +88,7 @@ ${productAndAudienceBlock}
 ${targetRegionBlock}
 ${originRegionBlock}
 ${userContextBlock}
+${painPointsBlock}
 
 【重要】你必须返回以下JSON格式（不要包含任何其他内容）：
 {

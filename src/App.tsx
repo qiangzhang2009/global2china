@@ -20,9 +20,11 @@ const LoadingPlaceholder = () => (
   </div>
 );
 
-gsap.registerPlugin(ScrollTrigger);
-
 function App() {
+  // 延迟注册GSAP插件，避免阻塞首屏渲染
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+  }, []);
   // 页面浏览追踪
   useEffect(() => {
     trackPageView('首页');
