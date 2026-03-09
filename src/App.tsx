@@ -1,15 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from './sections/Navbar';
 import Hero from './sections/Hero';
-import Services from './sections/Services';
-import Markets from './sections/Markets';
-import Tools from './sections/Tools';
-import About from './sections/About';
-import Contact from './sections/Contact';
-import Footer from './sections/Footer';
-import FloatingContact from './components/FloatingContact';
+
+// 懒加载下面不需要首屏渲染的组件
+const Services = lazy(() => import('./sections/Services'));
+const Tools = lazy(() => import('./sections/Tools'));
+const About = lazy(() => import('./sections/About'));
+const Contact = lazy(() => import('./sections/Contact'));
+const Footer = lazy(() => import('./sections/Footer'));
+const FloatingContact = lazy(() => import('./components/FloatingContact'));
+
+// 加载占位组件
+const LoadingPlaceholder = () => (
+  <div className="min-h-[200px] flex items-center justify-center">
+    <div className="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -45,14 +53,18 @@ function App() {
       <Navbar />
       <main>
         <Hero />
-        <Services />
-        {/* <Markets /> */}
-        <Tools />
-        <About />
-        <Contact />
+        <Suspense fallback={<LoadingPlaceholder />}>
+          <Services />
+          {/* <Markets /> */}
+          <Tools />
+          <About />
+          <Contact />
+        </Suspense>
       </main>
-      <Footer />
-      <FloatingContact />
+      <Suspense fallback={null}>
+        <Footer />
+        <FloatingContact />
+      </Suspense>
     </div>
   );
 }
