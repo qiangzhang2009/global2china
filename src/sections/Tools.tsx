@@ -32,6 +32,7 @@ import {
   CORE_PAIN_POINTS,
   AnalysisMode,
   AnalysisResult,
+  getContactUsContent,
 } from '@/lib/aiAnalysis';
 import { 
   trackClick, 
@@ -128,6 +129,7 @@ async function callAIAnalysisAPI(
     productType: data.result.productType,
     targetRegion: data.result.targetRegion,
     mode: data.result.mode,
+    contactUs: getContactUsContent(options?.language || 'zh'),
   };
 }
 
