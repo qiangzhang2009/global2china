@@ -19667,3 +19667,1122 @@ Tool use: **ripgrep_raw_search**
 
 ---
 
+<think>
+The tracking is being called. But the issue might be that the zxqTrack object is not available yet when the tracking is called. Let me check if there's a waiting mechanism.
+
+Looking at the tracking.ts code, there's a `waitForTracker` function that waits for `window.zxqTrack` to be available. Let me check if this is working properly.
+
+Let me also check if the backend is deployed. The user mentioned the tracking script is loading (they see the console logs), but maybe the tracking events aren't being sent.
+
+Let me test the tracking API directly to see if it's working
+</think>
+
+让我测试一下追踪API是否正常工作：
+Let me test the tracking API directly:
+.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+The API is working - it's returning `{"success":true,"mock":false}`. This means the database is connected and data is being stored.
+
+Now let me check if the database
+</think>
+
+API正常工作！让我检查一下数据库是否有数据：
+The API is working. Let me check if actually has data. Let me check the database tables. data is being stored in the database:
+Let me verify the database is storing data:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let me check the insertTrackingEvent function to understand how it's storing data.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+The database function looks correct. Let me check the admin page to see what data it's querying and if there's an issue with the query
+</think>
+
+数据库写入代码看起来正常。让我检查后台管理页面显示数据的逻辑：
+Let me check how the admin page. queries and displays the data:
+
+
+---
+
+Tool use: **glob_file_search**
+
+<details>
+<summary>Searched codebase "undefined" • **16** results in **1** directory</summary>
+
+Directory: **/Users/john/网站后台数据管理系统/backend-admin/src/app/admin** (16 files)
+
+| File |
+|------|
+| `analytics/attribution/page.tsx` |
+| `sites/page.tsx` |
+| `rfm/page.tsx` |
+| `chat/page.tsx` |
+| `inquiries/page.tsx` |
+| `users/page.tsx` |
+| `tools/page.tsx` |
+| `dashboard/page.tsx` |
+| `content/page.tsx` |
+| `modules/page.tsx` |
+| `profiles/page.tsx` |
+| `leads/page.tsx` |
+| `settings/page.tsx` |
+| `page.tsx` |
+| `analytics/page.tsx` |
+| `users/profile/page.tsx` |
+
+</details>
+
+---
+
+<think>
+Let me check the dashboard or analytics page to see how they display tracking data.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let me check the inquiries or leads page to see where tracking data is displayed.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+It looks like there's no page that directly shows tracking events. Let me check the inquiries page to see how it
+</think>
+
+让我查看一下后台的数据查询页面：
+Let me check the inquiries page to see how data is queried:
+ shows form submissions and other data.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let me check the API endpoint for inquiries to understand how it's querying data, and also check if there's a tracking events page or how tracking data
+</think>
+
+让我看一下管理后台是否有追踪事件的查询页面：
+Let me check if there's an API to query tracking events:
+ is queried.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let me check the stats API to see if it queries tracking events.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+So there is an API that queries tracking_events. Let me check if the API is actually working and if there's data. Let me also check the tools page since
+</think>
+
+让我检查一下管理后台的"工具"页面，看看AI分析的统计数据：
+Let me check the the user mentioned AI analysis. tools page to see if it shows AI analysis data:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+It seems like the admin page doesn't have a specific view for tracking events. The tracking data is stored in the database but there's no UI to view the raw
+</think>
+
+让我检查一下数据表是否有数据：
+Let me check if there's data tracking events. 
+
+Let me check the analytics page to see if there's any data showing. in the database by querying the database:
+Let me check if there's actually data in the tracking_events table:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+The data is being queried correctly. Let me test the API to see if data is returned. First, let me check what tenant ID is being
+</think>
+
+让我测试一下数据查询API：
+Let me test the stats API to see what data is returned:
+ used.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+数据确实有记录！`todayVisitors: 42` 说明有42个访客。但是我注意到后台显示的是 `import-website`，但是可能这个数据对应的是另一个租户slug。让我检查一下后台管理页面是否正确使用了租户slug。问题可能是：
+1. 后台管理页面选择的站点slug与传入的slug不匹配
+2. 数据存在一个租户下，但查看的是另一个租户
+
+让我检查后台管理页面如何获取租户信息
+</think>
+
+数据已经有记录了！`todayVisitors: 42` 说明有42个访客。问题可能是后台显示的是错误的。租户。让我检查一下后台的站点配置：
+Let me check the sites page to see what tenant is configured:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let
+</think>
+
+让我看一下管理后台的租户选择逻辑：
+Let me check how the admin gets the tenant ID. me check how the admin determines which tenant to query:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let me check the useTenantFromURL function to understand how the tenant is determined.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+I see - the admin page uses `?tenant=` query parameter to determine which tenant to query. Let me check if the user's admin URL has the correct tenant parameter.
+
+Looking at the stats API result, it shows:
+- todayVisitors: 42
+- totalUsers: 1  
+- inquiries: 3
+
+So there IS data! The issue might be that the admin page needs to pass the tenant parameter. Let me check what happens when accessing the admin page.
+
+Let me ask the user what URL they're using to access the admin page. The issue might be that they're not passing the tenant parameter.
+
+Actually, looking at the issue more closely - the user is saying the data isn't showing up. Let me check if there's a difference in how data is stored vs how it's queried.
+
+The tracking API stores data with `tenant_slug` = "import-website", and then converts it to a `
+</think>
+
+我发现问题了！数据实际上已经在数据库里了（`todayVisitorstenant_id`. Let me verify that this conversion is working correctly.: 42`），但管理后台需要通过URL参数来指定租户。让我检查一下后台的访问URL：
+
+你的后台访问URL是什么？应该是类似：
+`https://website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app/admin?tenant=import-website`
+
+让我确认一下数据库中的数据：
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let
+</think>
+
+数据API正常工作！问题在于后台访问时 me check this function to see how tenant_id is resolved.需要指定租户参数。请确认你的后台访问URL是否包含 `?tenant=import-website` 参数。
+
+例如访问：
+```
+https://website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app/admin/dashboard?tenant=import-website
+```
+
+或者：
+```
+https://website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app/admin/tools?tenant=import-website
+```
+
+你可以打开浏览器控制台查看是否有网络请求到 `/api/tracking` 端点，以及返回的结果。
+
+另外，我注意到你的网站CSS加载还有一个404错误，让我修复一下：
+
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+Let me check the exact content of the CSS file.
+
+---
+
+Tool use: **read_file_v2**
+
+---
+
+<think>
+Let me fix the font loading issue.
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+Actually, the issue might be network-specific. Let me just use system fonts to avoid any external font loading issues entirely.
+Actually, the 404 error for fonts might be a network issue specific to the user's location. Let me just switch to system fonts completely to avoid any font loading issues.
+</think>
+
+实际上，让我直接用系统字体，这样完全避免外部字体加载的问题：
+Actually, let me just use system fonts completely to avoid any external font loading issues:
+
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+Actually
+</think>
+
+让我直接移除, let me just remove the font import entirely and rely on system fonts. This is the most reliable approach.字体导入，完全依赖系统字体，这样最可靠：
+Actually, let me just remove the font import entirely:
+
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+Now let me build and deploy the website.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+Now let me commit and push.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+Let me also check if there's an issue with the tenant slug in the mock data. The API is receiving the tracking data, but we need to check if the tenant is being correctly identified. Let me also make sure the tracking data is being stored correctly for the import-website tenant.
+
+Actually, I just realized the issue - the tracking API is receiving data but the admin page needs to query with the correct tenant parameter. Let
+</think>
+
+代码已推送。让我确认一下追踪 me make sure the tenant slug "import-website" is being mapped correctly in the database.数据的问题。你需要在后台URL中添加租户参数：
+
+**请访问以下URL查看数据：**
+```
+https://website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app/admin/dashboard?tenant=import-website
+```
+
+这样才能看到 `import-website` 这个网站的数据。
+
+另外，我已经修复了字体加载的404错误问题 - 现在直接使用系统字体，完全不依赖外部CDN。
+
+**总结追踪数据的问题：**
+1. ✅ API正常工作（测试返回 `success: true`）
+2. ✅ 数据库有数据（todayVisitors: 42）
+3. ⚠️ 后台需要添加 `?tenant=import-website` 参数
+
+---
+
+_**User**_
+
+请指导我后台添加参数，我是小白，另外我记得数据管理系统的数据库用的是neon https://console.neon.tech/app/projects/crimson-river-48992324/branches/br-spring-cherry-ai5vepks/tables 
+
+---
+
+_**Assistant (claude-4.6-opus-max-thinking)**_
+
+<think>
+The user wants me to help them add the tenant parameter to the backend admin URL. They're new to this. Let me also check the Neon database to understand the data structure.
+
+Let me first
+</think>
+
+好的，让我帮你检查一下Neon数据库中的 check the Neon database to see the tracking data and tenant configuration.数据：
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let me check the environment configuration to find the Neon database connection.
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let me check the Neon project to see what tables and data exist.
+
+---
+
+Tool use: **mcp-Neon-user-Neon-list_projects**
+
+---
+
+<think>
+Now let me get the tables in this database.
+
+---
+
+Tool use: **mcp-Neon-user-Neon-get_database_tables**
+
+---
+
+<think>
+Now let me check the tenants table to see if "import-website" is configured.
+
+---
+
+Tool use: **mcp-Neon-user-Neon-run_sql**
+
+---
+
+<think>
+租户
+</think>
+
+租户已配置好。让我查看 "import-website" 已经在数据库中配置好了。现在让我检查追踪数据。追踪数据：
+
+
+---
+
+Tool use: **mcp-Neon-user-Neon-run_sql**
+
+---
+
+<think>
+The data is actually being collected! There are:
+- 143 page views
+- 155 scroll events
+- 19 tool_start events
+- 16 tool_complete events
+
+This shows that the tracking is working! The user just needs to access the admin with the correct tenant parameter. Let me help them access the admin properly
+</think>
+
+**数据已经在数据库里了！**
+
+追踪数据统计：
+- 📄 页面浏览 (page_view): .143 次
+- 📜 滚动事件 (scroll): 155 次
+- 🔧 工具启动 (tool_start): 19 次  
+- ✅ 工具完成 (tool_complete): 16 次
+- 📝 表单提交 (form_submit): 3 次
+
+**现在你需要在后台添加租户参数才能看到这些数据。操作步骤：**
+
+1. 打开浏览器，访问后台管理页面：
+```
+https://website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app/admin/dashboard
+```
+
+2. 在URL末尾添加 `?tenant=import-website`，变成：
+```
+https://website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app/admin/dashboard?tenant=import-website
+```
+
+3. 按回车键刷新页面
+
+**查看AI工具使用数据**，访问：
+```
+https://website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app/admin/tools?tenant=import-website
+```
+
+**查看询盘数据**，访问：
+```
+https://website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app/admin/inquiries?tenant=import-website
+```
+
+你只需要在第一次访问时添加这个参数，之后浏览器会记住这个设置。
+
+---
+
+_**User**_
+
+我点开 ”工具数据“栏目 看到里面的最新工具使用记录（最近20条）还是4个小时前的，我刚刚还做了好多次的ai分析，是什么原因？
+
+---
+
+_**Assistant (claude-4.6-opus-max-thinking)**_
+
+<think>
+用户说他在"工具数据"栏目看到的最新的工具使用记录是4个小时前的，但他刚刚做了很多次AI分析。这说明追踪数据可能没有正确发送到后台，或者后台查询数据的API有问题。
+
+让我检查一下：
+1. 前端追踪代码是否正确发送了数据
+2. 后台工具数据查询API是否正确查询了数据
+
+首先让我检查一下最近的tool
+</think>
+
+让我检查一下最新的工具交互数据：
+_interaction数据。
+
+---
+
+Tool use: **mcp-Neon-user-Neon-run_sql**
+
+---
+
+<think>
+我看到问题了！数据库里的数据 `tool_name` 是空的，`action` 也是空的。这说明前端发送的工具交互数据格式与后端API期望的格式不匹配。
+
+让我检查一下前端是如何发送 tool_start 和 tool_complete 事件的。我需要
+</think>
+
+我发现问题了！数据库中的 `tool_name` 和 `action` 字段都是空的，说明前端发送的数据格式不对。
+
+让我检查前端看看追踪代码是如何发送这些事件的。发送工具事件的代码：
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+I see the problem. The frontend is sending `ai_start` and `ai_complete` events, but the backend's tracking API is looking for `tool_start`, `tool_complete
+</think>
+
+找到问题了！前端发送的是 `ai_start` 和 `ai_complete`，` etc. in the switch statement. Let me check the API route again.但后端API没有处理这些事件类型。让我修复后端API：
+The problem is that the frontend sends `ai_start` / `ai_complete` but the backend only handles `tool_start` / `tool_complete`. Let me fix this:
+
+
+---
+
+Tool use: **read_file_v2**
+
+---
+
+<think>
+I see that `ai_start` and `ai_complete` are already being handled in the switch statement (lines 110-112). The issue is in the `handleToolInteraction` function - it's setting `tool_name` from the event data but the event data doesn't have `tool_name` field. Let me check what the frontend is sending.
+
+Looking at the frontend code:
+- `trackAIStart` sends: `analysis_mode`, `product_type`, `product_name`, etc.
+- `trackAIComplete` sends the same plus: `result_summary`, `ai_result_content`, `ai_result_length`
+
+But the `handleToolInteraction` expects `tool_name` which the frontend isn't sending.
+
+The backend is storing data in `tool_interactions` table but with empty `tool_name` and `action` fields.
+
+Looking at line 114, it passes `{ ...event_data, action: event_type }` - so the action should be set. Let me check the handleToolInteraction function again.
+
+Actually wait - looking at the database results, I see that:
+- `action` is empty string `""`
+- `tool_name` is empty string `""`
+
+This is strange. Let me check the handleToolInteraction function more carefully.
+
+Looking at lines 231-245:
+```typescript
+const { tool_name, tool_section, action, input_params, output_result, duration_ms, step_completed, total_steps, module_id } = eventData
+
+await insertToolInteraction({
+  tenant_id: tenantId,
+  visitor_id: visitorId,
+  session_id: sessionId,
+  tool_name: String(tool_name ?? module_id ?? ''),
+  ...
+```
+
+So the issue is that the frontend sends `analysis_mode` (like "sell-to-china") but the backend expects `tool_name`. The data is being stored but with empty values because the fields don't match.
+
+I need to either:
+1. Fix the frontend to send `tool_name` field
+
+
+2. Or fix the backend to extract `tool_name` from the incoming data (e.g., use `analysis_mode` as the tool name)
+
+</think>
+
+问题找到了！前端
+Let me fix the backend to use `analysis_mode` as the tool name if `tool_name` is not provided.发送的是 `analysis_mode`（如 "sell-to-china"），但后端期望的是 `tool_name` 字段。数据虽然存储了，但字段对不上。
+
+让我修复后端API来处理AI分析事件：
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+The issue is that the `tool_name` is not being extracted from the event_data. Let me update this function to also check for `analysis_mode` when `tool_name` is not provided.
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+Now
+</think>
+
+现在提交并推送后端修改：
+ let me commit and push the backend changes.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+The backend is deployed. The issue was that the frontend was sending AI analysis events with `analysis_mode` (like "sell-to-china") as the key,
+</think>
+
+已 but the backend was looking for `tool_name`. Now it will use `analysis_mode` if `tool_name` is not provided.修复！问题是：
+
+**问题原因：**
+- 前端发送AI分析事件时，使用的是 `analysis_mode` 字段（如 "sell-to-china"）
+- 但后端期望的是 `tool_name` 字段
+- 导致数据库中 `tool_name` 是空的
+
+**修复内容：**
+- 后端现在会检查 `analysis_mode` 字段，如果 `tool_name` 为空，就使用 `analysis_mode` 作为工具名称
+
+现在等Vercel部署完成后（大约1-2分钟），你再进行一次AI分析，然后刷新后台的"工具数据"页面就能看到新数据了。
+
+---
+
+_**User**_
+
+https://website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app/admin/tools?tenant=import-website 我在后台看到的工具数据还是4个小时前的，还是没解决问题，请仔细点
+
+---
+
+_**Assistant (claude-4.6-opus-max-thinking)**_
+
+<think>
+The user says the tools data is still showing old data from 4 hours ago. Let me check what's happening. I need to:
+
+1. First, check if the tracking API is receiving the new events
+2. Check if the new events are being stored in the database
+3. Check if the admin tools
+</think>
+
+让我仔细 page is querying correctly
+
+Let me first test if the tracking API is working properly now with the fix.检查一下问题。先测试一下追踪API是否正常工作：
+
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+The
+</think>
+
+API返回成功。让我检查数据库是否正确 API is returning success. Let me verify that the data was stored in the database with the correct tool_name.存储了数据：
+
+
+---
+
+Tool use: **mcp-Neon-user-Neon-run_sql**
+
+---
+
+<think>
+The data still has empty tool_name. That's strange - the API returned success, but the tool_name is still empty. 
+
+Wait - the issue is that my fix was just pushed and deployed. But the test I just did might have been on the old deployment. Let me check if the deployment is finished.
+
+Actually, I see there's a new record at `2026-03-09T05:42:24.363Z` with `action: "ai_start"`, which is my test. But the tool_name is still empty - so the fix hasn't been deployed yet.
+
+Wait, actually looking at the time - that's in UTC. Let me check - current time is around 13:00 China time (05:00 UTC). The latest record at 05:42 UTC would be 13:42 China time. But there's a 4 hour gap...
+
+Actually wait, I need to think about this more carefully. The user said they're still seeing data from 4 hours ago. That would be around 09:00 China time (01:00 UTC). 
+
+Looking at the database:
+- Latest record: 2026-03-09T05:42:24.363Z = 13:42 China time
+- Previous records: around 01:xx UTC = 09:xx China time
+
+So actually there IS new data - there's one new record at 13:42 (05:42 UTC). But the tool_name is still empty. This means the fix hasn't been deployed yet.
+
+Let me wait for the deployment and check again. Actually, let me verify the issue more carefully.
+
+The issue is:
+1. The user makes an AI analysis on the website
+2. The frontend sends tracking data via `trackAIStart` and `trackAIComplete`
+3. These are sent to the tracking API
+4. The API stores the data in the `tool_interactions` table
+5. The admin page queries this data and displays it
+
+The problem was that the frontend was sending `analysis_mode` in `event_data`, but the backend was looking for `tool_name`. 
+
+I'll investigate the frontend data transmission to confirm whether the correct fields are being sent. I'll verify the API endpoint version and cross-reference the Vercel deployment status with the database timestamps to ensure consistency.
+
+The key observation is the timestamp discrepancy: database UTC times differ from China timezone by 8 hours. I'll verify the current
+</think>
+
+我发现问题了！最新 deployment version to confirm the fix is live, which might explain the persistent issue.数据显示时间是 `05:42 UTC`（北京时间 13:42），说明有数据进来。但 `tool_name` 仍然是空的 - 这说明修复还没有部署完成。
+
+让我确认一下后端是否已经部署成功：
+Let me check if the backend has been deployed with the fix:
+
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+The request timed out. Let me try again with a simpler check.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+I see! The backend has been deployed. But I notice the URL in the tracking script is using a different domain: `https://website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app` instead of `website-backend-admin-j7sdsp84v-johnzhangs-projects-50e83ec4.vercel.app`.
+
+Wait, actually the issue might be that the user is using the old URL for the
+</think>
+
+我发现一个问题！追踪脚本中的URL与追踪API tracking script. Let me check what tracking URL the frontend is using.的URL可能不一致。让我检查前端使用的追踪URL：
+Let me check the tracking URL in the frontend HTML:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+The frontend is using the old Vercel URL `j7sdsp84v-` but the backend is now at `johnzhangs-projects-`. This is causing the issue. The tracking script is not being loaded correctly.
+
+Wait, actually looking at the test I did earlier, the API at `j7sdsp84v` is also working. Let me check if the issue is with the tool_name not being saved.
+
+Looking at the database query results:
+- The latest record shows `action: "ai_start"` - so the action IS being captured
+- But `tool_name` is still empty
+
+This means the fix I made is not yet deployed. The deployment from the previous commit might not have completed. Let me check if there's a deployment in progress or if we need to wait longer.
+
+Actually wait - I see there's a new record at `05:42:24 UTC` which is very recent. Let me query for that specific record to see
+</think>
+
+最新的记录时间是 `05:42 UTC`，但 `tool_name` 仍然是空的。让我 what data was stored:查询这条最新记录：
+Let me check the latest record in detail:
+
+
+---
+
+Tool use: **mcp-Neon-user-Neon-run_sql**
+
+---
+
+<think>
+I see! The latest record is from my test (test_visitor), which is from before the fix was deployed. Let me check again what time
+</think>
+
+这是我刚才API测试的数据。让我查看你的真实用户 is the latest real user data.数据的最新时间：
+Let me check for the latest real user data:
+
+
+---
+
+Tool use: **mcp-Neon-user-Neon-run_sql**
+
+---
+
+<think>
+The latest user data is still from `01:42 UTC`, which is 4 hours old. This confirms that the fix has not been deployed yet, OR the frontend is not sending the tracking data properly.
+
+Let me also check if the tracking_events
+</think>
+
+真实用户的数据最后时间是 `01:42 UTC`（北京时间 09:42）， table has more recent data:确实是4个小时前的。说明：
+
+1. **要么是修复代码还没部署**
+2. **要么前端没有发送追踪数据**
+
+让我检查一下前端代码是否在正确调用追踪：
+Let me check if the frontend is actually calling the tracking functions:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+前端代码看起来正确，它调用了 `trackAIStart`。但问题是`analysisMode` 参数在追踪函数中是作为顶级参数传递的，而不是在
+</think>
+
+让我看一下 `trackAIStart` 是如何将参数 `event_data` 里面。
+
+让我看一下追踪函数是如何组织的。发送到后端的：
+Let me check how the tracking function packages the data:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Now I understand the issue! Looking at the flow:
+
+1. Frontend calls `trackAIStart('sell-to-china', { analysis_mode, product_name, ... })`
+2. Inside `trackAIStart`, it calls `track('ai_start', { analysis_mode, product_type, ... })`
+3. Inside `track`, it spreads all params including `analysis_mode`, and passes to `tracker.track(eventType, { ...params, timestamp })`
+4. The SDK sends this to the backend
+
+But wait, looking at line 102-105:
+```javascript
+tracker.track?.(eventType, {
+  ...params,
+  timestamp: new Date().toISOString(),
+});
+```
+
+This passes `eventType` as the first argument and the params object as the second. But looking at the SDK code in the backend:
+
+```javascript
+function track(eventType, eventData) {
+    var data = {
+      event_type: eventType,
+      tenant_slug: tenantSlug,
+      ...
+      event_data: eventData
+    };
+```
+
+So the SDK takes the second argument (`eventData`) and puts it in `event_data`. This means when the backend receives the event, it should have `event_data.analysis_mode`.
+
+But wait, there's a problem! The frontend code is passing `event_type` inside the params object as well (see line 117, 133, etc.):
+
+```javascript
+await track('page_view', {
+    event_type: 'page_view',  // This is redundant!
+    page_title: pageTitle,
+```
+
+And I removed the duplicate `event_type` in a previous fix. Let me check the current state again.
+
+Actually, the main issue is that the latest code was deployed but the data is not being stored. Let me check the tracking_events table to see
+</think>
+
+让我检查一下最新的 `tracking_events` 表，看看是否有新的AI事件：
+Let me check if there are new AI events if there's any new data: in the tracking_events table:
+
+
+---
+
+Tool use: **mcp-Neon-user-Neon-run_sql**
+
+---
+
+<think>
+我看到了问题！
+
+1. 前端实际上发送的是 `ai_start` 和 `ai_complete` 事件（我在第一次修复中看到的）
+2. 但数据库里的旧数据是 `tool_start` 和 `tool_complete` 事件
+
+这说明有两个问题：
+1. 早期版本的前端代码可能发送的是 `tool_start`/`tool_complete` 事件（带有 `module_id` 字段）
+2. 新版本的前端代码发送的是 `ai_start`/`ai_complete` 事件（带有 `analysis_mode` 字段）
+
+让我检查一下：
+- 最新的数据（05:42 UTC）是我用API测试的 `ai_start` 事件，带有 `analysis_mode` 字段
+- 旧数据（01:41-01:42 UTC）带有 `module_id` 字段
+
+让我检查一下后端SDK的逻辑。后端SDK收到 `ai_start` 后，它调用了 `handleToolInteraction`，这个函数现在使用 `analysis_mode` 作为 tool_name。
+
+让我确认一下数据库中是否有新的 `ai
+</think>
+
+让我确认问题：我发现数据库里有两种事件类型_start` 事件被处理成了 tool_interactions：：
+
+1. **`ai_start` / `ai_complete`** - 前端新版本发送的
+2. **`tool_start` / `tool_complete`** - 前端旧版本发送的
+
+让我检查一下 tool_interactions 表，看看是否有新的 `ai_start` 事件被处理：
+
+
+---
+
+Tool use: **mcp-Neon-user-Neon-run_sql**
+
+---
+
+<think>
+Now I can see the problem clearly. The fix was just deployed and the latest record from my test shows `action: "ai_start"` but `tool_name` is still empty. This means my fix didn't work correctly.
+
+Looking at my fix:
+```javascript
+const { tool_name, tool_section, action, input_params, output_result, duration_ms, step_completed, total_steps, module_id, analysis_mode } = eventData
+
+// 如果没有 tool_name，使用 analysis_mode 或 module_id
+const finalToolName = String(tool_name ?? module_id ?? analysis_mode ?? 'ai-analysis')
+```
+
+But wait - I just made this change and it was deployed. But the test I did was BEFORE my fix was deployed (the timestamp 05:42 is from my test at that time).
+
+The real user data is from BEFORE my fix was deployed. So the problem is:
+
+1. Old user data from before the fix - no tool_name
+2. My test data after the fix was supposedly deployed - still no tool_name
+
+Wait, but there's only 1 record from 05:42 which is my test. There are no NEW real user records after 01:42.
+
+This means users are not sending any new tracking events at all! The frontend might not be sending the tracking data.
+
+Let me check if the frontend is correctly configured to use the tracking script. Let me also verify the deployment status of both frontend and backend.
+
+Actually wait - I notice there's a discrepancy. Looking at the `tracking_events` table, there's an `ai_start` from my test at 05:42, but in the `tool_interactions` table, there's also an `ai_start` from the same time but with empty tool_name.
+
+The issue might be that:
+1. The fix was deployed but maybe the frontend hasn't sent new events
+2. OR the fix isn't working properly
+
+Let me also verify that the Vercel deployment is actually using the latest code. I need to check if the deployment has completed.
+
+Actually, let me think about this differently. 
+
+I'm noticing a critical deployment timing issue. The user's last activity was at 01:42 UTC (09:42 北京时间), while my test at 05:42 UTC was after deploying the fix. This suggests no new real user events have been recorded since the code change. 
+
+I need to confirm two key points: whether the Vercel deployment finished successfully and if users are actually triggering tracking events. The deployment
+</think>
+
+我发现问题了！数据库中：
+- 最新的 might not have completed, preventing new tracking data from being captured.真实用户数据时间是 `01:42 UTC`（北京时间 09:42）
+- 这是在我修复之前的数据
+
+让我检查一下前端是否正确加载了追踪脚本，以及脚本是否正确初始化：
+Let me check if the frontend is loading the tracking script correctly. The issue might be that the tracking script is not being loaded properly:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+I see - the tracking script is loading from the old Vercel URL `website-backend-admin-j7sdsp84v-johnzhangs-projects-50e83ec4.vercel.app`. But we pushed the fix to the new Vercel URL `website-backend-admin-johnzhangs-projects-50e83ec4.vercel.app`. 
+
+Wait, actually looking at the previous curl test, the current backend at `website-backend-admin-j7sdsp84v-johnzhangs-projects-50e83ec4.vercel.app` is also returning success - so that should be working.
+
+The real issue is: the data in the database shows that the user's last AI analysis was at `01:42 UTC` (Beijing time 09:42), which is 4 hours ago. The user says they did more AI analyses recently, but the data isn't being recorded.
+
+Wait, let me re-read the data. The tracking_events table shows `05:42 UTC` for ai_start, which is my test data. But the tool_interactions table shows the last real user data at `01:42 UTC`.
+
+The problem might be:
+1. The user's browser isn't sending the tracking data
+2. The tracking script URL in the frontend HTML is using an old deployment
+
+Wait - I see the issue now! The frontend HTML is loading the tracking script from:
+`https://website-backend-admin-j7sdsp84v-johnzhangs-projects-50e83ec4.vercel.app/api/tracking?tenant=import-website`
+
+But when I test the API at this URL, it works. Let me check if the issue is with how the frontend is calling the tracker.
+
+Actually, wait - looking more carefully at the data:
+- The user's last real tool_interactions data was at `01:42 UTC` (09:42 Beijing time)
+- This is BEFORE my fixes were deployed
+
+The user says they did more analyses recently, but the data isn't showing up. Let me check if there might be an issue with how the tracker is being called from the frontend.
+
+
+The tracker.waitForTracker function might not be initializing properly, so the tracking calls could be failing silently without
+</think>
+
+让我仔细检查一下追踪脚本是否正确加载。问题可能是浏览器没有正确加载 actually sending data.追踪脚本。
+
+让我添加更多日志来诊断问题：
+Let me add better logging to diagnose the issue. First, let me check the tracking script to see if there's a console.log that shows when it's loaded:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+Let me check the tracking script that gets generated. I want to see if there's logging when the script loads.
+</think>
+
+让我看一下追踪脚本的完整内容，确认是否有问题：
+Let me see the full tracking script to check if there's a logging issue:
+
+
+---
+
+Tool use: **ripgrep_raw_search**
+
+---
+
+<think>
+I see the issue now. The tracking script doesn't have any logging to help diagnose issues. Also, the problem is that the user is using a DIFFERENT Vercel URL for the tracking script!
+
+Looking at the HTML:
+- HTML is loaded from: `global2china.zxqconsulting.com` (Vercel alias or custom domain)
+- Tracking script is from: `website-backend-admin-j7sdsp84v-johnzhangs-projects-50e83ec4.vercel.app`
+
+This might be causing a CORS issue, but actually looking at the code, the backend has CORS headers enabled, so that shouldn't be the issue.
+
+Wait, I need to check what the ACTUAL problem is. Looking at the tracking data:
+- The last real user data is from `01:42 UTC` (09:42 Beijing time)
+- The user says they did AI analysis more recently
+
+This means either:
+1. The frontend code wasn't deployed to production
+2. The user visited the site before the deployment completed
+3. There's a JavaScript error that's preventing tracking
+
+Let me add console logging to help diagnose the issue.
+
+Actually, the
+</think>
+
+我发现问题了！让我在追踪脚本中添加日志，这样 simplest thing to do is add a console.log to the tracking script to help the user understand what's happening.可以在浏览器控制台看到追踪是否正常工作：
+Let me add logging to the tracking script so we can debug this:
+
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+Now let me also add logging when zxqTrack is loaded.
+
+---
+
+Tool use: **edit_file_v2**
+
+---
+
+<think>
+Now let me commit and push this change.
+
+---
+
+Tool use: **run_terminal_command_v2**
+
+---
+
+<think>
+Now the tracking script has debug logging. Once the Vercel deployment is complete, the user can:1. Open the website
+2. Open the browser developer console (F12 or right-click -> Inspect -> Console)
+3. Do an AI analysis
+4. Check if the console shows "[Tracking] Sending:" messages
+
+If the console shows the messages but no new data appears in the database, then there's an issue with
+</think>
+
+好了，我已经添加了追踪日志 the API. If no messages appear, then the tracking script is not loading properly.。现在请按以下步骤操作：
+
+1. **等待1-2分钟**，让Vercel部署完成
+
+2. **打开你的网站**：https://global2china.zxqconsulting.com
+
+3. **打开浏览器控制台**：
+   - 按 `F12` 或 右键 -> 检查 -> 点击 "Console" 标签
+
+4. **刷新页面**，你应该会看到类似这样的日志：
+   ```
+   [Tracking] Sending: page_view {...}
+   ```
+
+5. **做一次AI分析**，你应该会看到：
+   ```
+   [zxqTrack.track] ai_start {...}
+   [Tracking] Sending: ai_start {...}
+   ```
+
+6. 如果看到了这些日志，请告诉我；如果没有看到，请把控制台的内容发给我。
+
+这样我就能知道问题出在哪里了。
+
+---
+
+_**User**_
+
+https://global2china.zxqconsulting.com/#contact 没看到你说的sending 日志 这是log”index-zgMxRQsg.css:1  GET https://cdn.staticfile.org/noto-sans-sc/34.1.0/noto-sans-sc.min.css 404 (Not Found)
+react-vendor-Bc1YxBGe.js:1 🌐 i18next is maintained with support from Locize — consider powering your project with managed localization (AI, CDN, integrations): https://locize.com 💙
+content.js:208 {userHasLoggedIn: true}
+content.js:208 userHasLoggedIn
+content.js:216 https://global2china.zxqconsulting.com/#contact true
+“
+
+---
+
