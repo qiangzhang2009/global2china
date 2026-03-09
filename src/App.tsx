@@ -46,7 +46,7 @@ function App() {
       <main>
         <Hero />
         <Services />
-        <Markets />
+        {/* <Markets /> */}
         <Tools />
         <About />
         <Contact />

@@ -73,24 +73,54 @@ ${categoryLevel1Name ? `- 一级分类：${categoryLevel1Name}` : ''}`
     : ''
 
   const prompt = `
-请作为专业的国际贸易咨询顾问，分析以下内容：
+请作为专业的国际贸易咨询顾问，分析以下内容，并以严格的JSON格式返回结果。
 
 ${productAndAudienceBlock}
 ${targetRegionBlock}
 ${originRegionBlock}
 ${userContextBlock}
 
-请从以下几个维度进行分析：
-1. 市场可行性分析
-2. 目标客户群体画像
-3. 销售渠道建议
-4. 竞争优势与挑战
-5. 合规要求（进口资质、认证等）
-6. 定价策略建议
-7. 风险评估
-8. 下一步行动建议
+【重要】你必须返回以下JSON格式（不要包含任何其他内容）：
+{
+  "marketDemand": {
+    "overall": "一句话市场概述",
+    "regional": "区域分析",
+    "targetCustomers": "目标客户描述",
+    "growthTrend": "增长趋势"
+  },
+  "competition": {
+    "level": "竞争程度",
+    "mainCompetitors": ["竞争对手1", "竞争对手2"],
+    "differentiation": "差异化建议"
+  },
+  "pricing": {
+    "recommendedRange": "价格范围",
+    "costBreakdown": "成本构成",
+    "margin": "利润空间"
+  },
+  "timeline": {
+    "import": "清关周期",
+    "marketEntry": "进入市场周期",
+    "roi": "投资回报周期"
+  },
+  "challenges": {
+    "level": "风险等级",
+    "mainRisks": ["风险1", "风险2"],
+    "mitigation": ["应对1", "应对2"]
+  },
+  "compliance": {
+    "certifications": ["资质1", "资质2"],
+    "labeling": ["标签要求1"],
+    "testing": ["检测要求1"]
+  },
+  "actionPlan": {
+    "nextSteps": ["下一步1", "下一步2"],
+    "priority": "优先级",
+    "keySuccessFactors": ["成功因素1", "成功因素2"]
+  }
+}
 
-请用${language === 'zh' ? '简体中文' : language === 'en' ? 'English' : language === 'ja' ? '日本語' : '简体中文'}回复。
+请用${language === 'zh' ? '简体中文' : language === 'en' ? 'English' : language === 'ja' ? '日本語' : '简体中文'}回复。只返回JSON，不要其他内容。
 `
 
   try {

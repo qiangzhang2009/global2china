@@ -78,19 +78,32 @@ async function callAIAnalysisAPI(
   let parsedContent = content;
   if (typeof content === 'string') {
     try {
-      // 尝试提取 JSON（可能有 markdown 代码块）
-      const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/);
+      // 清理 AI 返回的内容
+      let cleanedContent = content
+        .replace(/```json\n?/g, '')  // 移除 ```json
+        .replace(/```\n?/g, '')       // 移除 ```
+        .replace(/^```[\s\S]*?```$/g, '') // 移除整块代码
+        .replace(/「【】」/g, '')     // 移除特殊字符
+        .replace(/【】/g, '')         // 移除【】
+        .replace(/「」/g, '')         // 移除「」
+        .replace(/\n/g, ' ')          // 替换换行为空格
+        .replace(/,\s*}/g, '}')       // 修复 trailing comma
+        .replace(/,\s*]/g, ']')       // 修复 trailing comma
+        .trim();
+      
+      // 尝试提取 JSON 对象
+      const jsonMatch = cleanedContent.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        parsedContent = JSON.parse(jsonMatch[1]);
+        parsedContent = JSON.parse(jsonMatch[0]);
       } else {
-        // 尝试直接解析
-        parsedContent = JSON.parse(content);
+        throw new Error('No JSON found');
       }
     } catch (e) {
-      // 如果解析失败，直接返回原始内容作为 marketDemand.overall
+      // 如果解析失败，使用默认数据
+      console.error('JSON parse error:', e);
       parsedContent = {
         marketDemand: {
-          overall: content,
+          overall: content.substring(0, 200),
           regional: '',
           targetCustomers: '',
           growthTrend: ''
