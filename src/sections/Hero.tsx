@@ -160,7 +160,7 @@ const Hero = () => {
               className="flex items-center justify-center gap-3 bg-gradient-to-r from-violet-500 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl transition-all hover:-translate-y-1 w-full sm:w-auto"
             >
               <span className="text-xl">📈</span>
-              我要把产品卖到中国
+              {t('hero.sellToChina')}
               <ArrowRight className="w-5 h-5" />
             </button>
 
@@ -171,13 +171,13 @@ const Hero = () => {
                 className="flex items-center justify-center gap-2 bg-white text-gray-700 border-2 border-emerald-300 px-8 py-4 rounded-xl font-semibold text-lg hover:border-emerald-500 hover:text-emerald-600 transition-all"
               >
                 <span className="text-xl">🌍</span>
-                从海外采购产品
+                {t('hero.procurement')}
               </button>
               <button
                 onClick={scrollToContact}
                 className="flex items-center justify-center gap-2 bg-white text-gray-700 border-2 border-gray-200 px-8 py-4 rounded-xl font-semibold text-lg hover:border-emerald-400 hover:text-emerald-600 transition-all"
               >
-                联系我们
+                {t('hero.contactUs')}
               </button>
             </div>
           </div>
@@ -189,8 +189,8 @@ const Hero = () => {
                 <Globe className="w-6 h-6 text-emerald-600" />
               </div>
               <div>
-                <div className="font-semibold text-gray-900">全球采购网络</div>
-                <div className="text-sm text-gray-500">覆盖日本、欧洲、东南亚</div>
+                <div className="font-semibold text-gray-900">{t('hero.feature1Title')}</div>
+                <div className="text-sm text-gray-500">{t('hero.feature1Desc')}</div>
               </div>
             </div>
             <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm">
@@ -198,8 +198,8 @@ const Hero = () => {
                 <Package className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <div className="font-semibold text-gray-900">一站式服务</div>
-                <div className="text-sm text-gray-500">从选品到上架全流程</div>
+                <div className="font-semibold text-gray-900">{t('hero.feature2Title')}</div>
+                <div className="text-sm text-gray-500">{t('hero.feature2Desc')}</div>
               </div>
             </div>
             <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm">
@@ -207,8 +207,8 @@ const Hero = () => {
                 <TrendingUp className="w-6 h-6 text-orange-600" />
               </div>
               <div>
-                <div className="font-semibold text-gray-900">高效准入</div>
-                <div className="text-sm text-gray-500">快速办理中国进口资质</div>
+                <div className="font-semibold text-gray-900">{t('hero.feature3Title')}</div>
+                <div className="text-sm text-gray-500">{t('hero.feature3Desc')}</div>
               </div>
             </div>
           </div>

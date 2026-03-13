@@ -171,7 +171,7 @@ export default function Navbar() {
 
               {/* Mobile Language Selector */}
               <div className="mt-2 pt-4 border-t border-gray-100">
-                <div className="text-sm text-gray-500 px-4 mb-2">选择语言</div>
+                <div className="text-sm text-gray-500 px-4 mb-2">{t('nav.selectLanguage')}</div>
                 <div className="grid grid-cols-3 gap-2">
                   {languages.slice(0, 9).map((lang) => (
                     <button

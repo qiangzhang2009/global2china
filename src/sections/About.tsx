@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Globe, ArrowRight, CheckCircle, Clock, Shield, Star, Users, Award, MapPin } from 'lucide-react';
 
 const values = [
-  { icon: Shield, titleKey: 'about.value1', desc: '我们承诺的事情一定会做到' },
-  { icon: Clock, titleKey: 'about.value2', desc: '每天13小时在线支持' },
-  { icon: CheckCircle, titleKey: 'about.value3', desc: '从选品到物流全流程服务' },
-  { icon: Star, titleKey: 'about.value4', desc: '深耕中国市场，了解当地规则' },
+  { icon: Shield, titleKey: 'about.value1', descKey: 'about.values.desc1' },
+  { icon: Clock, titleKey: 'about.value2', descKey: 'about.values.desc2' },
+  { icon: CheckCircle, titleKey: 'about.value3', descKey: 'about.values.desc3' },
+  { icon: Star, titleKey: 'about.value4', descKey: 'about.values.desc4' },
 ];
 
 const About = () => {
@@ -50,7 +50,7 @@ const About = () => {
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900 text-sm">{t(value.titleKey)}</div>
-                    <div className="text-xs text-gray-500">{value.desc}</div>
+                    <div className="text-xs text-gray-500">{t(value.descKey)}</div>
                   </div>
                 </div>
               ))}
@@ -104,9 +104,15 @@ const About = () => {
                 {/* Service Tags */}
                 <div className="mt-6 pt-6 border-t border-gray-100">
                   <div className="flex flex-wrap gap-2 justify-center">
-                    {['海外选品', '采购代理', '市场准入', '品牌本地化', '海外调研'].map((tag, i) => (
+                    {[
+                      'about.serviceTag1',
+                      'about.serviceTag2',
+                      'about.serviceTag3',
+                      'about.serviceTag4',
+                      'about.serviceTag5'
+                    ].map((tagKey, i) => (
                       <span key={i} className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
-                        {tag}
+                        {t(tagKey)}
                       </span>
                     ))}
                   </div>

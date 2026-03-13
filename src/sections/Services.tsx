@@ -100,8 +100,8 @@ const Services = () => {
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl">📈</span>
-            <h3 className="text-xl font-bold text-gray-900">海外厂家服务 · 卖到中国</h3>
-            <span className="text-sm text-gray-500">(帮助海外品牌进入中国市场)</span>
+            <h3 className="text-xl font-bold text-gray-900">{t('services.sellToChinaTitle')}</h3>
+            <span className="text-sm text-gray-500">({t('services.sellToChinaDesc')})</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.sellToChina.map((service, index) => (
@@ -142,8 +142,8 @@ const Services = () => {
         <div>
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl">🌍</span>
-            <h3 className="text-xl font-bold text-gray-900">中国采购商服务 · 从海外采购</h3>
-            <span className="text-sm text-gray-500">(帮助中国企业全球采购)</span>
+            <h3 className="text-xl font-bold text-gray-900">{t('services.sourcingTitle')}</h3>
+            <span className="text-sm text-gray-500">({t('services.sourcingDesc')})</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.sourcing.map((service, index) => (

@@ -23,6 +23,14 @@ import {
   PRODUCT_CATEGORIES,
   getProductTypeFromCategory,
   getCategoryContextForAI,
+  getProductCategoryName,
+  getProductCategoryParentName,
+  getUserRoleName,
+  getBusinessStageName,
+  getPainPointName,
+  getChinaRegionName,
+  getSourcingRegionName,
+  getMarketName,
   MARKET_REGIONS,
   getMarketsByRegion,
   ANALYSIS_MODES,
@@ -251,22 +259,35 @@ const Tools = () => {
   const currentProductL1 = PRODUCT_CATEGORIES.find(c => c.id === productLevel1);
   const currentProductL2 = currentProductL1?.children.find(c => c.id === productLevel2);
   
-  const getProductName = () => currentProductL2?.name || currentProductL1?.name || '产品';
-  const getCategoryLevel1Name = () => currentProductL1?.name || '';
-  const getCategoryLevel2Name = () => currentProductL2?.name || getProductName();
+  const getProductName = () => {
+    const name = currentProductL2?.name || currentProductL1?.name || '产品';
+    const nameEn = currentProductL2?.nameEn || currentProductL1?.nameEn;
+    return currentLanguage === 'zh' ? name : (nameEn || name);
+  };
+  const getCategoryLevel1Name = () => {
+    const name = currentProductL1?.name || '';
+    const nameEn = currentProductL1?.nameEn;
+    return currentLanguage === 'zh' ? name : (nameEn || name);
+  };
+  const getCategoryLevel2Name = () => {
+    const name = currentProductL2?.name || getProductName();
+    const nameEn = currentProductL2?.nameEn;
+    return currentLanguage === 'zh' ? name : (nameEn || name);
+  };
   const getCategoryContext = () => getCategoryContextForAI(productLevel1, productLevel2);
   
   const getCountryName = () => {
     if (analysisMode === 'sourcing') {
       const market = availableMarkets.find((m: { id: string }) => m.id === selectedMarket);
-      return market?.name || '';
+      if (!market) return '';
+      return currentLanguage === 'zh' ? market.name : (market.nameEn || market.name);
     }
     return '';
   };
   
   const getCountryRegionName = () => {
     if (analysisMode === 'sourcing') {
-      return currentSourcingRegion?.name || '';
+      return currentLanguage === 'zh' ? currentSourcingRegion?.name : (currentSourcingRegion?.nameEn || currentSourcingRegion?.name);
     }
     return '';
   };
@@ -303,9 +324,12 @@ const Tools = () => {
             categoryLevel2Name: getCategoryLevel2Name(),
             categoryContext: getCategoryContext(),
             countryRegion: getCountryRegionName(),
-            userRole: userRoleId ? USER_ROLES.find((r) => r.id === userRoleId)?.name : undefined,
-            businessStage: businessStageId ? BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name : undefined,
-            painPoints: selectedPainPoints.length > 0 ? selectedPainPoints.map(id => CORE_PAIN_POINTS.find(p => p.id === id)?.name).filter(Boolean) : undefined,
+            userRole: userRoleId ? (currentLanguage === 'zh' ? USER_ROLES.find((r) => r.id === userRoleId)?.name : (USER_ROLES.find((r) => r.id === userRoleId)?.nameEn || USER_ROLES.find((r) => r.id === userRoleId)?.name)) : undefined,
+            businessStage: businessStageId ? (currentLanguage === 'zh' ? BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name : (BUSINESS_STAGES.find((s) => s.id === businessStageId)?.nameEn || BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name)) : undefined,
+            painPoints: selectedPainPoints.length > 0 ? selectedPainPoints.map(id => {
+              const point = CORE_PAIN_POINTS.find(p => p.id === id);
+              return currentLanguage === 'zh' ? point?.name : (point?.nameEn || point?.name);
+            }).filter(Boolean) : undefined,
             language: currentLanguage,
           }
         );
@@ -322,9 +346,12 @@ const Tools = () => {
             categoryContext: getCategoryContext(),
             countryName: getCountryName(),
             countryRegion: getCountryRegionName(),
-            userRole: userRoleId ? USER_ROLES.find((r) => r.id === userRoleId)?.name : undefined,
-            businessStage: businessStageId ? BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name : undefined,
-            painPoints: selectedPainPoints.length > 0 ? selectedPainPoints.map(id => CORE_PAIN_POINTS.find(p => p.id === id)?.name).filter(Boolean) : undefined,
+            userRole: userRoleId ? (currentLanguage === 'zh' ? USER_ROLES.find((r) => r.id === userRoleId)?.name : (USER_ROLES.find((r) => r.id === userRoleId)?.nameEn || USER_ROLES.find((r) => r.id === userRoleId)?.name)) : undefined,
+            businessStage: businessStageId ? (currentLanguage === 'zh' ? BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name : (BUSINESS_STAGES.find((s) => s.id === businessStageId)?.nameEn || BUSINESS_STAGES.find((s) => s.id === businessStageId)?.name)) : undefined,
+            painPoints: selectedPainPoints.length > 0 ? selectedPainPoints.map(id => {
+              const point = CORE_PAIN_POINTS.find(p => p.id === id);
+              return currentLanguage === 'zh' ? point?.name : (point?.nameEn || point?.name);
+            }).filter(Boolean) : undefined,
             language: currentLanguage,
           }
         );
@@ -460,7 +487,7 @@ const Tools = () => {
                           )}
                         >
                           <span>{role.icon}</span>
-                          <span>{role.name}</span>
+                          <span>{currentLanguage === 'zh' ? role.name : (role.nameEn || role.name)}</span>
                         </button>
                       ))}
                     </div>
@@ -484,7 +511,7 @@ const Tools = () => {
                           )}
                         >
                           <span>{stage.icon}</span>
-                          <span>{stage.name}</span>
+                          <span>{currentLanguage === 'zh' ? stage.name : (stage.nameEn || stage.name)}</span>
                         </button>
                       ))}
                     </div>
@@ -495,8 +522,8 @@ const Tools = () => {
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-600 text-xs font-bold flex items-center justify-center">?</span>
-                    <label className="text-sm font-semibold text-gray-700">{t('tools.painPoints') || '核心关注点（可选）'}</label>
-                    <span className="text-xs text-gray-400">{t('tools.painPointsHint') || '选择您最关心的问题，AI将重点分析'}</span>
+                    <label className="text-sm font-semibold text-gray-700">{t('tools.painPoints')}</label>
+                    <span className="text-xs text-gray-400">{t('tools.painPointsHint')}</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {CORE_PAIN_POINTS.map((point) => (
@@ -519,7 +546,7 @@ const Tools = () => {
                         )}
                       >
                         <span>{point.icon}</span>
-                        <span>{point.name}</span>
+                        <span>{currentLanguage === 'zh' ? point.name : (point.nameEn || point.name)}</span>
                       </button>
                     ))}
                   </div>
@@ -547,7 +574,7 @@ const Tools = () => {
                         )}
                       >
                         <span className="text-base">{cat.icon}</span>
-                        <span>{cat.name}</span>
+                        <span>{currentLanguage === 'zh' ? cat.name : (cat.nameEn || cat.name)}</span>
                       </button>
                     ))}
                   </div>
@@ -566,7 +593,7 @@ const Tools = () => {
                             : 'border-gray-100 bg-gray-50 text-gray-600 hover:border-violet-200 hover:bg-violet-25'
                         )}
                       >
-                        {item.name}
+                        {currentLanguage === 'zh' ? item.name : (item.nameEn || item.name)}
                       </button>
                     ))}
                   </div>
@@ -603,10 +630,10 @@ const Tools = () => {
                             <span className={cn(
                               'font-semibold',
                               chinaRegion === region.id ? 'text-violet-700' : 'text-gray-700'
-                            )}>{region.name}</span>
+                            )}>{currentLanguage === 'zh' ? region.name : (region.nameEn || region.name)}</span>
                           </div>
-                          <div className="text-xs text-gray-500 mb-1">{region.cities}</div>
-                          <div className="text-xs text-gray-400">{region.desc}</div>
+                          <div className="text-xs text-gray-500 mb-1">{currentLanguage === 'zh' ? region.cities : (region.citiesEn || region.cities)}</div>
+                          <div className="text-xs text-gray-400">{currentLanguage === 'zh' ? region.desc : (region.descEn || region.desc)}</div>
                         </button>
                       ))}
                     </div>
@@ -629,7 +656,7 @@ const Tools = () => {
                             )}
                           >
                             <span className="text-base">{region.icon}</span>
-                            <span>{region.name}</span>
+                            <span>{currentLanguage === 'zh' ? region.name : (region.nameEn || region.name)}</span>
                           </button>
                         ))}
                       </div>
@@ -637,10 +664,10 @@ const Tools = () => {
                     {/* 具体采购来源国家 */}
                     <div>
                       <span className="text-xs text-gray-500 block mb-2">
-                        {currentSourcingRegion?.name}{t('tools.region.source')}
+                        {currentSourcingRegion ? (currentLanguage === 'zh' ? currentSourcingRegion.name : (currentSourcingRegion.nameEn || currentSourcingRegion.name)) : ''}{t('tools.region.source')}
                       </span>
                       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                        {availableMarkets.map((market: { id: string; name: string; flag: string; tag?: string }) => (
+                        {availableMarkets.map((market: { id: string; name: string; nameEn?: string; flag: string; tag?: string; tagEn?: string }) => (
                           <button
                             key={market.id}
                             onClick={() => handleMarketChange(market.id)}
@@ -652,10 +679,10 @@ const Tools = () => {
                             )}
                           >
                             <span className="text-xl">{market.flag}</span>
-                            <span className="text-xs">{market.name}</span>
+                            <span className="text-xs">{currentLanguage === 'zh' ? market.name : (market.nameEn || market.name)}</span>
                             {market.tag && (
                               <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 text-[10px] bg-violet-500 text-white rounded-full font-medium">
-                                {market.tag}
+                                {currentLanguage === 'zh' ? market.tag : (market.tagEn || market.tag)}
                               </span>
                             )}
                           </button>
@@ -693,7 +720,9 @@ const Tools = () => {
                   <CheckCircle className="w-5 h-5 text-emerald-500" />
                   <h4 className="text-lg font-bold text-gray-900">{t('tools.analysisResult')}</h4>
                   <span className="text-xs text-gray-400 ml-2">
-                    ({analysisMode === 'sell-to-china' ? `${t('tools.target')}: ${currentChinaRegion?.name}` : `${t('tools.sourcingFrom')}: ${getCountryName() || currentSourcingRegion?.name}`})
+                    ({analysisMode === 'sell-to-china' 
+                      ? `${t('tools.target')}: ${currentChinaRegion ? (currentLanguage === 'zh' ? currentChinaRegion.name : (currentChinaRegion.nameEn || currentChinaRegion.name)) : ''}` 
+                      : `${t('tools.sourcingFrom')}: ${getCountryName() || (currentSourcingRegion ? (currentLanguage === 'zh' ? currentSourcingRegion.name : (currentSourcingRegion.nameEn || currentSourcingRegion.name)) : '')}`})
                   </span>
                 </div>
 
@@ -705,7 +734,7 @@ const Tools = () => {
                   </div>
                   <div className="space-y-3">
                     <div className="bg-violet-50 rounded-lg p-3">
-                      <span className="text-xs text-violet-600 font-medium">总体评估</span>
+                      <span className="text-xs text-violet-600 font-medium">{t('tools.analysis.overall')}</span>
                       <p className="text-gray-900 text-sm mt-1">{analysisResult.marketDemand?.overall}</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -714,7 +743,7 @@ const Tools = () => {
                         <p className="text-gray-900 text-sm mt-1">{analysisResult.marketDemand?.regional}</p>
                       </div>
                       <div className="bg-gray-50 rounded-lg p-3">
-                        <span className="text-xs text-gray-500 font-medium">目标客户</span>
+                        <span className="text-xs text-gray-500 font-medium">{t('tools.analysis.targetCustomers')}</span>
                         <p className="text-gray-900 text-sm mt-1">{analysisResult.marketDemand?.targetCustomers}</p>
                       </div>
                     </div>
@@ -727,7 +756,7 @@ const Tools = () => {
                   <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
                     <div className="flex items-center gap-2 mb-3">
                       <Target className="w-5 h-5 text-purple-600" />
-                      <span className="text-sm font-medium text-gray-500">竞争分析</span>
+                      <span className="text-sm font-medium text-gray-500">{t('tools.competitionAnalysis')}</span>
                     </div>
                     <div className="flex items-center gap-2 mb-3">
                       <div className="flex gap-1">
@@ -767,7 +796,7 @@ const Tools = () => {
                   <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
                     <div className="flex items-center gap-2 mb-3">
                       <TrendingUp className="w-5 h-5 text-emerald-600" />
-                      <span className="text-sm font-medium text-gray-500">定价策略</span>
+                      <span className="text-sm font-medium text-gray-500">{t('tools.pricingStrategy')}</span>
                     </div>
                     <p className="text-gray-900 font-bold text-lg mb-2">
                       {analysisResult.pricing?.recommendedRange}
@@ -789,23 +818,23 @@ const Tools = () => {
                 <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 mb-4">
                   <div className="flex items-center gap-2 mb-3">
                     <Clock className="w-5 h-5 text-blue-600" />
-                    <span className="text-sm font-semibold text-gray-900">时间规划</span>
+                    <span className="text-sm font-semibold text-gray-900">{t('tools.timelinePlanning')}</span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-blue-50 rounded-lg p-3">
                       <span className="text-xs text-blue-600 font-medium">
-                        {analysisMode === 'sell-to-china' ? '进口清关' : '采购到货'}
+                        {analysisMode === 'sell-to-china' ? t('tools.importClearance') : t('tools.procurementArrival')}
                       </span>
                       <p className="text-gray-900 font-bold text-lg mt-1">{analysisResult.timeline?.import}</p>
                     </div>
                     <div className="bg-blue-50 rounded-lg p-3">
                       <span className="text-xs text-blue-600 font-medium">
-                        {analysisMode === 'sell-to-china' ? '市场进入' : '首批上架'}
+                        {analysisMode === 'sell-to-china' ? t('tools.marketEntry') : t('tools.firstListing')}
                       </span>
                       <p className="text-gray-900 font-bold text-lg mt-1">{analysisResult.timeline?.marketEntry}</p>
                     </div>
                     <div className="bg-blue-50 rounded-lg p-3">
-                      <span className="text-xs text-blue-600 font-medium">投资回报周期</span>
+                      <span className="text-xs text-blue-600 font-medium">{t('tools.roiPeriod')}</span>
                       <p className="text-gray-900 font-bold text-lg mt-1">{analysisResult.timeline?.roi}</p>
                     </div>
                   </div>
@@ -816,14 +845,14 @@ const Tools = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <Shield className="w-5 h-5 text-amber-600" />
-                      <span className="font-semibold text-gray-900">风险与挑战</span>
+                      <span className="font-semibold text-gray-900">{t('tools.risksChallenges')}</span>
                     </div>
                     <span className={cn('px-3 py-1 rounded-full text-sm font-semibold', 
                       analysisResult.challenges?.level === '低' ? 'text-emerald-600 bg-emerald-100' :
                       analysisResult.challenges?.level === '中' ? 'text-amber-600 bg-amber-100' :
                       'text-red-600 bg-red-100'
                     )}>
-                      {analysisResult.challenges?.level}风险
+                      {analysisResult.challenges?.level}{currentLanguage === 'zh' ? '风险' : ' Risk'}
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -854,7 +883,7 @@ const Tools = () => {
                 <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 mb-4">
                   <div className="flex items-center gap-2 mb-3">
                     <Shield className="w-5 h-5 text-blue-600" />
-                    <span className="font-semibold text-gray-900">合规要求</span>
+                    <span className="font-semibold text-gray-900">{t('tools.complianceRequirements')}</span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
@@ -895,7 +924,7 @@ const Tools = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <Target className="w-5 h-5" />
-                      <span className="font-semibold">行动计划</span>
+                      <span className="font-semibold">{t('tools.analysis.actionPlan')}</span>
                     </div>
                     <span className="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-sm font-medium">
                       {analysisResult.actionPlan?.priority}
@@ -903,7 +932,7 @@ const Tools = () => {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <span className="text-violet-200 text-xs mb-2 block">下一步行动</span>
+                      <span className="text-violet-200 text-xs mb-2 block">{t('tools.nextSteps')}</span>
                       <ul className="space-y-1">
                         {analysisResult.actionPlan?.nextSteps?.map((step: string, i: number) => (
                           <li key={i} className="text-sm flex items-start gap-2">
@@ -914,7 +943,7 @@ const Tools = () => {
                       </ul>
                     </div>
                     <div>
-                      <span className="text-violet-200 text-xs mb-2 block">成功关键因素</span>
+                      <span className="text-violet-200 text-xs mb-2 block">{t('tools.keySuccessFactors')}</span>
                       <div className="flex flex-wrap gap-2">
                         {analysisResult.actionPlan?.keySuccessFactors?.map((factor: string, i: number) => (
                           <span key={i} className="px-2 py-1 bg-white/20 backdrop-blur rounded text-xs">

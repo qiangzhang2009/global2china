@@ -122,8 +122,8 @@ const Contact = () => {
           {/* Contact Info - Three Team Members */}
           <div className="animate-on-scroll">
             <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 text-white h-full">
-              <h3 className="text-2xl font-bold mb-2">上海张小强企业咨询事务所</h3>
-              <p className="text-emerald-100 text-sm mb-8">可靠·专业·高效</p>
+              <h3 className="text-2xl font-bold mb-2">{t('contact.companyName')}</h3>
+              <p className="text-emerald-100 text-sm mb-8">{t('contact.companySlogan')}</p>
 
               {/* Team Members */}
               <div className="space-y-6">
@@ -159,9 +159,9 @@ const Contact = () => {
               </div>
 
               <div className="mt-8 pt-6 border-t border-white/20">
-                <div className="text-lg font-medium mb-2">微信公众号/视频号</div>
+                <div className="text-lg font-medium mb-2">{t('contact.wechat')}</div>
                 <div className="opacity-80 text-sm">
-                  张小强出海
+                  {t('contact.wechatID')}
                 </div>
               </div>
             </div>
@@ -173,7 +173,7 @@ const Contact = () => {
               {/* 询盘类型选择 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">
-                  我想咨询 *
+                  {t('contact.inquiryLabel')} *
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {inquiryTypes.map((type) => (
@@ -280,7 +280,7 @@ const Contact = () => {
                 {isSubmitting ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>提交中...</span>
+                    <span>{t('contact.submitting')}</span>
                   </>
                 ) : (
                   <>

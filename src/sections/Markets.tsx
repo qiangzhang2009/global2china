@@ -5,80 +5,72 @@ import { ArrowRight } from 'lucide-react';
 const markets = [
   {
     id: 'japan',
-    name: '日本',
+    nameKey: 'markets.japan',
     flag: '🇯🇵',
-    desc: '高品质消费品、化妆品、保健品',
-    descEn: 'High-quality consumer goods, cosmetics, health products',
+    descKey: 'markets.japan.desc',
     color: 'from-pink-400 to-rose-500',
     bgColor: 'bg-pink-50',
     hoverColor: 'hover:from-pink-400 hover:to-rose-500',
   },
   {
     id: 'europe',
-    name: '欧洲',
+    nameKey: 'markets.europe',
     flag: '🇪🇺',
-    desc: '奢侈品、母婴用品、葡萄酒',
-    descEn: 'Luxury goods, baby products, wine',
+    descKey: 'markets.europe.desc',
     color: 'from-blue-400 to-indigo-500',
     bgColor: 'bg-blue-50',
     hoverColor: 'hover:from-blue-400 hover:to-indigo-500',
   },
   {
     id: 'southeast',
-    name: '东南亚',
+    nameKey: 'markets.southeast',
     flag: '🌏',
-    desc: '热带水果、特色食品、纺织品',
-    descEn: 'Tropical fruits, specialty foods, textiles',
+    descKey: 'markets.southeast.desc',
     color: 'from-yellow-400 to-orange-500',
     bgColor: 'bg-yellow-50',
     hoverColor: 'hover:from-yellow-400 hover:to-orange-500',
   },
   {
     id: 'australia',
-    name: '澳大利亚',
+    nameKey: 'markets.australia',
     flag: '🇦🇺',
-    desc: '保健品、奶粉、乳制品',
-    descEn: 'Health products, milk powder, dairy products',
+    descKey: 'markets.australia.desc',
     color: 'from-green-400 to-emerald-500',
     bgColor: 'bg-green-50',
     hoverColor: 'hover:from-green-400 hover:to-emerald-500',
   },
   {
     id: 'usa',
-    name: '美国',
+    nameKey: 'markets.usa',
     flag: '🇺🇸',
-    desc: '科技产品、健康食品、日用品',
-    descEn: 'Technology products, healthy food, daily necessities',
+    descKey: 'markets.usa.desc',
     color: 'from-purple-400 to-violet-500',
     bgColor: 'bg-purple-50',
     hoverColor: 'hover:from-purple-400 hover:to-violet-500',
   },
   {
     id: 'korea',
-    name: '韩国',
+    nameKey: 'markets.korea',
     flag: '🇰🇷',
-    desc: '美妆产品、电子产品、时尚服饰',
-    descEn: 'Beauty products, electronics, fashion apparel',
+    descKey: 'markets.korea.desc',
     color: 'from-rose-400 to-pink-500',
     bgColor: 'bg-rose-50',
     hoverColor: 'hover:from-rose-400 hover:to-pink-500',
   },
   {
     id: 'newzealand',
-    name: '新西兰',
+    nameKey: 'markets.newzealand',
     flag: '🇳🇿',
-    desc: '优质乳制品、保健品、蜂蜜',
-    descEn: 'Premium dairy, health products, honey',
+    descKey: 'markets.newzealand.desc',
     color: 'from-teal-400 to-cyan-500',
     bgColor: 'bg-teal-50',
     hoverColor: 'hover:from-teal-400 hover:to-cyan-500',
   },
   {
     id: 'canada',
-    name: '加拿大',
+    nameKey: 'markets.canada',
     flag: '🇨🇦',
-    desc: '冰酒、枫糖浆、农产品',
-    descEn: 'Ice wine, maple syrup, agricultural products',
+    descKey: 'markets.canada.desc',
     color: 'from-red-400 to-orange-500',
     bgColor: 'bg-red-50',
     hoverColor: 'hover:from-red-400 hover:to-orange-500',
@@ -118,8 +110,8 @@ const Markets = () => {
         <div className="mb-12">
           <div className="flex items-center justify-center gap-3 mb-8">
             <span className="text-2xl">🌍</span>
-            <h3 className="text-xl font-bold text-gray-900">全球采购来源</h3>
-            <span className="text-sm text-gray-500">(从这些国家/地区进口)</span>
+            <h3 className="text-xl font-bold text-gray-900">{t('markets.globalSourcing')}</h3>
+            <span className="text-sm text-gray-500">({t('markets.globalSourcingDesc')})</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {markets.map((market, index) => (
@@ -136,10 +128,10 @@ const Markets = () => {
                   <div>
                     <div className="text-4xl mb-3">{market.flag}</div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-white transition-colors duration-300">
-                      {t(`markets.${market.id}`)}
+                      {t(market.nameKey)}
                     </h3>
                     <p className="text-sm text-gray-600 group-hover:text-white/90 transition-colors duration-300">
-                      {t(`markets.${market.id}.desc`)}
+                      {t(market.descKey)}
                     </p>
                   </div>
 
@@ -157,17 +149,17 @@ const Markets = () => {
         <div>
           <div className="flex items-center justify-center gap-3 mb-8">
             <span className="text-2xl">🏠</span>
-            <h3 className="text-xl font-bold text-gray-900">目标销售区域</h3>
-            <span className="text-sm text-gray-500">(您的产品想卖到中国哪里？)</span>
+            <h3 className="text-xl font-bold text-gray-900">{t('markets.targetRegions')}</h3>
+            <span className="text-sm text-gray-500">({t('markets.targetRegionsDesc')})</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { id: 'east-china', name: '华东地区', cities: '上海、江苏、浙江', desc: '经济发达，消费力强，进口商品认可度高', icon: '🏙️', color: 'from-blue-400 to-indigo-500', bg: 'bg-blue-50' },
-              { id: 'south-china', name: '华南地区', cities: '广东、福建、广西', desc: '对外贸易活跃，物流便利，渠道丰富', icon: '🌴', color: 'from-green-400 to-emerald-500', bg: 'bg-green-50' },
-              { id: 'north-china', name: '华北地区', cities: '北京、天津、河北', desc: '政治文化中心，高端消费市场', icon: '🏯', color: 'from-purple-400 to-violet-500', bg: 'bg-purple-50' },
-              { id: 'southwest', name: '西南地区', cities: '四川、重庆、云南', desc: '新兴消费市场，增长潜力大', icon: '🏔️', color: 'from-orange-400 to-red-500', bg: 'bg-orange-50' },
-              { id: 'central', name: '华中地区', cities: '湖北、湖南、河南', desc: '人口众多，市场潜力大', icon: '🏢', color: 'from-amber-400 to-yellow-500', bg: 'bg-amber-50' },
-              { id: 'national', name: '全国范围', cities: '覆盖全国', desc: '全渠道布局，最大化市场覆盖', icon: '🗺️', color: 'from-cyan-400 to-blue-500', bg: 'bg-cyan-50' },
+              { id: 'east-china', nameKey: 'markets.region.eastChina.name', citiesKey: 'markets.region.eastChina.cities', descKey: 'markets.region.eastChina.desc', icon: '🏙️', color: 'from-blue-400 to-indigo-500', bg: 'bg-blue-50' },
+              { id: 'south-china', nameKey: 'markets.region.southChina.name', citiesKey: 'markets.region.southChina.cities', descKey: 'markets.region.southChina.desc', icon: '🌴', color: 'from-green-400 to-emerald-500', bg: 'bg-green-50' },
+              { id: 'north-china', nameKey: 'markets.region.northChina.name', citiesKey: 'markets.region.northChina.cities', descKey: 'markets.region.northChina.desc', icon: '🏯', color: 'from-purple-400 to-violet-500', bg: 'bg-purple-50' },
+              { id: 'southwest', nameKey: 'markets.region.southwest.name', citiesKey: 'markets.region.southwest.cities', descKey: 'markets.region.southwest.desc', icon: '🏔️', color: 'from-orange-400 to-red-500', bg: 'bg-orange-50' },
+              { id: 'central', nameKey: 'markets.region.central.name', citiesKey: 'markets.region.central.cities', descKey: 'markets.region.central.desc', icon: '🏢', color: 'from-amber-400 to-yellow-500', bg: 'bg-amber-50' },
+              { id: 'national', nameKey: 'markets.region.national.name', citiesKey: 'markets.region.national.cities', descKey: 'markets.region.national.desc', icon: '🗺️', color: 'from-cyan-400 to-blue-500', bg: 'bg-cyan-50' },
             ].map((region, index) => (
               <div
                 key={region.id}
@@ -178,9 +170,9 @@ const Markets = () => {
                 <div className={`relative ${region.bg} group-hover:bg-transparent p-4 min-h-[140px] flex flex-col justify-between transition-colors duration-500`}>
                   <div>
                     <div className="text-3xl mb-2">{region.icon}</div>
-                    <h4 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-white transition-colors">{region.name}</h4>
-                    <p className="text-xs text-gray-500 mb-1">{region.cities}</p>
-                    <p className="text-sm text-gray-600 group-hover:text-white/90 transition-colors">{region.desc}</p>
+                    <h4 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-white transition-colors">{t(region.nameKey)}</h4>
+                    <p className="text-xs text-gray-500 mb-1">{t(region.citiesKey)}</p>
+                    <p className="text-sm text-gray-600 group-hover:text-white/90 transition-colors">{t(region.descKey)}</p>
                   </div>
                 </div>
               </div>

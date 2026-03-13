@@ -193,37 +193,37 @@ export const ANALYSIS_MODES = [
 
 /** 用户身份/角色 - 帮助 AI 做身份定位，使建议更贴合（选填） */
 export const USER_ROLES = [
-  { id: 'brand', name: '品牌方/厂商', desc: '自有品牌或生产方，计划进入/拓展中国市场', icon: '🏷️' },
-  { id: 'trader', name: '贸易商/进口商', desc: '从事进出口贸易，寻找新品类或新区域', icon: '📦' },
-  { id: 'ecommerce', name: '跨境电商卖家', desc: '在平台开店，选品或拓展供应链', icon: '🛒' },
-  { id: 'procurement', name: '采购经理/企业采购', desc: '为企业采购进口商品或原料', icon: '📋' },
-  { id: 'individual', name: '个人/其他', desc: '个人兴趣、创业考察等', icon: '👤' },
+  { id: 'brand', name: '品牌方/厂商', nameEn: 'Brand/Manufacturer', desc: '自有品牌或生产方，计划进入/拓展中国市场', descEn: 'Own brand or manufacturer, planning to enter/expand China market', icon: '🏷️' },
+  { id: 'trader', name: '贸易商/进口商', nameEn: 'Trader/Importer', desc: '从事进出口贸易，寻找新品类或新区域', descEn: 'Engaged in import/export trade, looking for new categories or regions', icon: '📦' },
+  { id: 'ecommerce', name: '跨境电商卖家', nameEn: 'Cross-border E-commerce Seller', desc: '在平台开店，选品或拓展供应链', descEn: 'Opening stores on platforms, selecting products or expanding supply chain', icon: '🛒' },
+  { id: 'procurement', name: '采购经理/企业采购', nameEn: 'Procurement Manager', desc: '为企业采购进口商品或原料', descEn: 'Procuring imported goods or raw materials for enterprises', icon: '📋' },
+  { id: 'individual', name: '个人/其他', nameEn: 'Individual/Other', desc: '个人兴趣、创业考察等', descEn: 'Personal interest, entrepreneurship research, etc.', icon: '👤' },
 ] as const;
 
 /** 当前业务阶段 - 帮助 AI 判断意图与侧重点（选填） */
 export const BUSINESS_STAGES = [
-  { id: 'research', name: '市场调研中', desc: '了解市场可行性与大致门槛', icon: '🔍' },
-  { id: 'sourcing', name: '选品/洽谈中', desc: '已锁定方向，在选品或谈供应商', icon: '🤝' },
-  { id: 'first-import', name: '准备首次进口', desc: '即将落地首单，关注合规与流程', icon: '🚀' },
-  { id: 'experienced', name: '已有进口经验', desc: '希望优化或拓展品类/区域', icon: '📈' },
+  { id: 'research', name: '市场调研中', nameEn: 'Market Research', desc: '了解市场可行性与大致门槛', descEn: 'Understanding market feasibility and approximate thresholds', icon: '🔍' },
+  { id: 'sourcing', name: '选品/洽谈中', nameEn: 'Product Selection/Negotiating', desc: '已锁定方向，在选品或谈供应商', descEn: 'Direction locked, selecting products or negotiating with suppliers', icon: '🤝' },
+  { id: 'first-import', name: '准备首次进口', nameEn: 'Preparing First Import', desc: '即将落地首单，关注合规与流程', descEn: 'About to finalize first order, focusing on compliance and process', icon: '🚀' },
+  { id: 'experienced', name: '已有进口经验', nameEn: 'Experienced Importer', desc: '希望优化或拓展品类/区域', descEn: 'Hope to optimize or expand categories/regions', icon: '📈' },
 ] as const;
 
 // 核心痛点/关注点 - 帮助 AI 调整输出重点（选填）
 export const CORE_PAIN_POINTS = [
-  { id: 'compliance', name: '合规准入', desc: '关心产品能否合法进入、注册流程与成本', icon: '⚖️' },
-  { id: 'profit', name: '盈利测算', desc: '关心投入产出比、回本周期、利润空间', icon: '💰' },
-  { id: 'product-fit', name: '产品适配', desc: '关心产品是否适合当地市场、是否需要改造', icon: '📦' },
-  { id: 'channel', name: '渠道落地', desc: '关心如何把产品铺到消费者手里', icon: '🛒' },
-  { id: 'risk', name: '风险管控', desc: '关心有哪些坑、如何规避潜在风险', icon: '🛡️' },
+  { id: 'compliance', name: '合规准入', nameEn: 'Compliance & Access', desc: '关心产品能否合法进入、注册流程与成本', descEn: 'Concerned about whether products can legally enter, registration process and costs', icon: '⚖️' },
+  { id: 'profit', name: '盈利测算', nameEn: 'Profit Calculation', desc: '关心投入产出比、回本周期、利润空间', descEn: 'Concerned about ROI, payback period, profit margin', icon: '💰' },
+  { id: 'product-fit', name: '产品适配', nameEn: 'Product Fit', desc: '关心产品是否适合当地市场、是否需要改造', descEn: 'Concerned about whether products suit local markets or need adaptation', icon: '📦' },
+  { id: 'channel', name: '渠道落地', nameEn: 'Channel Implementation', desc: '关心如何把产品铺到消费者手里', descEn: 'Concerned about how to get products to consumers', icon: '🛒' },
+  { id: 'risk', name: '风险管控', nameEn: 'Risk Management', desc: '关心有哪些坑、如何规避潜在风险', descEn: 'Concerned about potential pitfalls and how to avoid risks', icon: '🛡️' },
 ] as const;
 
 // 中国目标区域（卖到中国模式使用）
 export const CHINA_REGIONS = [
-  { id: 'east-china', name: '华东地区', cities: '上海、江苏、浙江', desc: '经济发达，消费力强，进口商品认可度高', icon: '🏙️' },
-  { id: 'south-china', name: '华南地区', cities: '广东、福建、广西', desc: '对外贸易活跃，物流便利，渠道丰富', icon: '🌴' },
-  { id: 'north-china', name: '华北地区', cities: '北京、天津、河北', desc: '政治文化中心，高端消费市场', icon: '🏯' },
-  { id: 'southwest', name: '西南地区', cities: '四川、重庆、云南', desc: '新兴消费市场，增长潜力大', icon: '🏔️' },
-  { id: 'national', name: '全国范围', cities: '覆盖全国', desc: '全渠道布局，最大化市场覆盖', icon: '🗺️' },
+  { id: 'east-china', name: '华东地区', nameEn: 'East China', cities: '上海、江苏、浙江', citiesEn: 'Shanghai, Jiangsu, Zhejiang', desc: '经济发达，消费力强，进口商品认可度高', descEn: 'Developed economy, strong purchasing power, high recognition of imported goods', icon: '🏙️' },
+  { id: 'south-china', name: '华南地区', nameEn: 'South China', cities: '广东、福建、广西', citiesEn: 'Guangdong, Fujian, Guangxi', desc: '对外贸易活跃，物流便利，渠道丰富', descEn: 'Active foreign trade, convenient logistics, rich channels', icon: '🌴' },
+  { id: 'north-china', name: '华北地区', nameEn: 'North China', cities: '北京、天津、河北', citiesEn: 'Beijing, Tianjin, Hebei', desc: '政治文化中心，高端消费市场', descEn: 'Political and cultural center, high-end consumer market', icon: '🏯' },
+  { id: 'southwest', name: '西南地区', nameEn: 'Southwest China', cities: '四川、重庆、云南', citiesEn: 'Sichuan, Chongqing, Yunnan', desc: '新兴消费市场，增长潜力大', descEn: 'Emerging consumer market, high growth potential', icon: '🏔️' },
+  { id: 'national', name: '全国范围', nameEn: 'Nationwide', cities: '覆盖全国', citiesEn: 'Nationwide coverage', desc: '全渠道布局，最大化市场覆盖', descEn: 'Full-channel layout, maximize market coverage', icon: '🗺️' },
 ] as const;
 
 // 增强版分析结果接口 - 重新设计以匹配用户选择的选项
@@ -919,12 +919,14 @@ export const PRODUCT_TYPES = [
 export interface ProductCategoryLevel2 {
   id: string;
   name: string;
+  nameEn: string;
   /** 若存在则为三级，否则为叶子，id 作为 productType 传给 API */
-  children?: Array<{ id: string; name: string }>;
+  children?: Array<{ id: string; name: string; nameEn: string }>;
 }
 export interface ProductCategoryLevel1 {
   id: string;
   name: string;
+  nameEn: string;
   icon: string;
   children: ProductCategoryLevel2[];
 }
@@ -933,53 +935,58 @@ export const PRODUCT_CATEGORIES: ProductCategoryLevel1[] = [
   {
     id: 'supplement',
     name: '保健食品',
+    nameEn: 'Health Supplements',
     icon: '💊',
     children: [
-      { id: 'supplement', name: '膳食补充剂' },
-      { id: 'supplement_nutrition', name: '营养品' },
-      { id: 'supplement_vitamin', name: '维生素/矿物质' },
+      { id: 'supplement', name: '膳食补充剂', nameEn: 'Dietary Supplements' },
+      { id: 'supplement_nutrition', name: '营养品', nameEn: 'Nutrition Products' },
+      { id: 'supplement_vitamin', name: '维生素/矿物质', nameEn: 'Vitamins/Minerals' },
     ],
   },
   {
     id: 'herbal',
     name: '传统草药',
+    nameEn: 'Traditional Herbal Medicine',
     icon: '🌿',
     children: [
-      { id: 'herbal', name: '植物提取/药食同源' },
-      { id: 'herbal_traditional', name: '中成药/汉方' },
-      { id: 'herbal_tea', name: '草本茶/养生茶' },
+      { id: 'herbal', name: '植物提取/药食同源', nameEn: 'Plant Extracts/Food as Medicine' },
+      { id: 'herbal_traditional', name: '中成药/汉方', nameEn: 'Chinese Patent Medicine/Kampo' },
+      { id: 'herbal_tea', name: '草本茶/养生茶', nameEn: 'Herbal Tea/Health Tea' },
     ],
   },
   {
     id: 'cosmetics',
     name: '化妆品',
+    nameEn: 'Cosmetics',
     icon: '✨',
     children: [
-      { id: 'cosmetics', name: '护肤' },
-      { id: 'cosmetics_makeup', name: '彩妆' },
-      { id: 'cosmetics_personal', name: '个护/洗护' },
+      { id: 'cosmetics', name: '护肤', nameEn: 'Skincare' },
+      { id: 'cosmetics_makeup', name: '彩妆', nameEn: 'Makeup' },
+      { id: 'cosmetics_personal', name: '个护/洗护', nameEn: 'Personal Care' },
     ],
   },
   {
     id: 'food',
     name: '普通食品',
+    nameEn: 'Food & Beverage',
     icon: '🍎',
     children: [
-      { id: 'food', name: '休闲食品/零食' },
-      { id: 'food_dairy', name: '乳品/饮料' },
-      { id: 'food_grain', name: '粮油/调味' },
+      { id: 'food', name: '休闲食品/零食', nameEn: 'Snacks' },
+      { id: 'food_dairy', name: '乳品/饮料', nameEn: 'Dairy/Beverages' },
+      { id: 'food_grain', name: '粮油/调味', nameEn: 'Grains/Oils/Condiments' },
     ],
   },
   {
     id: 'silver',
     name: '银发经济相关',
+    nameEn: 'Silver Economy Products',
     icon: '👴',
     children: [
-      { id: 'elderly_health', name: '老年保健' },
-      { id: 'elderly_food', name: '适老食品' },
-      { id: 'care_products', name: '护理用品' },
-      { id: 'health_monitor', name: '健康监测' },
-      { id: 'elderly_devices', name: '适老器械' },
+      { id: 'elderly_health', name: '老年保健', nameEn: 'Elderly Health Products' },
+      { id: 'elderly_food', name: '适老食品', nameEn: 'Elderly-friendly Food' },
+      { id: 'care_products', name: '护理用品', nameEn: 'Care Products' },
+      { id: 'health_monitor', name: '健康监测', nameEn: 'Health Monitoring' },
+      { id: 'elderly_devices', name: '适老器械', nameEn: 'Elderly-friendly Devices' },
     ],
   },
 ];
@@ -1031,6 +1038,74 @@ export function getCategoryContextForAI(level1Id: string, level2Id: string): str
     food: `一级分类「${level1Name}」，二级「${level2Name}」，为普通食品与饮料。`,
   };
   return contextByLevel1[level1Id] ?? `商品分类：${level1Name} > ${level2Name}。`;
+}
+
+// 辅助函数：获取翻译后的名称
+export function getNameByLanguage(item: { name: string; nameEn?: string }, language: string = 'zh'): string {
+  if (language !== 'zh' && item.nameEn) {
+    return item.nameEn;
+  }
+  return item.name;
+}
+
+// 获取商品分类名称（支持多语言）
+export function getProductCategoryName(level1Id: string, level2Id: string, language: string = 'zh'): string {
+  const cat = PRODUCT_CATEGORIES.find((c) => c.id === level1Id);
+  if (!cat) return '';
+  const l2 = cat.children.find((c) => c.id === level2Id);
+  if (!l2) return getNameByLanguage(cat, language);
+  return getNameByLanguage(l2, language);
+}
+
+// 获取商品分类的父级名称
+export function getProductCategoryParentName(level1Id: string, language: string = 'zh'): string {
+  const cat = PRODUCT_CATEGORIES.find((c) => c.id === level1Id);
+  if (!cat) return '';
+  return getNameByLanguage(cat, language);
+}
+
+// 获取用户角色名称
+export function getUserRoleName(roleId: string, language: string = 'zh'): string {
+  const role = USER_ROLES.find((r) => r.id === roleId);
+  if (!role) return '';
+  return getNameByLanguage(role, language);
+}
+
+// 获取业务阶段名称
+export function getBusinessStageName(stageId: string, language: string = 'zh'): string {
+  const stage = BUSINESS_STAGES.find((s) => s.id === stageId);
+  if (!stage) return '';
+  return getNameByLanguage(stage, language);
+}
+
+// 获取核心痛点名称
+export function getPainPointName(pointId: string, language: string = 'zh'): string {
+  const point = CORE_PAIN_POINTS.find((p) => p.id === pointId);
+  if (!point) return '';
+  return getNameByLanguage(point, language);
+}
+
+// 获取中国区域名称
+export function getChinaRegionName(regionId: string, language: string = 'zh'): string {
+  const region = CHINA_REGIONS.find((r) => r.id === regionId);
+  if (!region) return '';
+  return getNameByLanguage(region, language);
+}
+
+// 获取采购区域名称
+export function getSourcingRegionName(regionId: string, language: string = 'zh'): string {
+  const region = MARKET_REGIONS.find((r) => r.id === regionId);
+  if (!region) return '';
+  return getNameByLanguage(region, language);
+}
+
+// 获取目标市场名称
+export function getMarketName(regionId: string, marketId: string, language: string = 'zh'): string {
+  const markets = MARKETS_BY_REGION[regionId];
+  if (!markets) return '';
+  const market = markets.find((m) => m.id === marketId);
+  if (!market) return '';
+  return getNameByLanguage(market, language);
 }
 
 // 来源国按产品类型分组
@@ -1130,48 +1205,48 @@ export const ORIGIN_COUNTRIES = [
 
 // 市场分类：简化为地理区域（更符合跨境贸易决策逻辑）
 export const MARKET_REGIONS = [
-  { id: 'east-asia', name: '东亚', icon: '🎌', flag: '🇯🇵' },
-  { id: 'southeast-asia', name: '东南亚', icon: '🌏', flag: '🌏' },
-  { id: 'oceania', name: '大洋洲', icon: '🦘', flag: '🇦🇺' },
-  { id: 'europe', name: '欧洲', icon: '🇪🇺', flag: '🇪🇺' },
-  { id: 'north-america', name: '北美', icon: '🌎', flag: '🇺🇸' },
-  { id: 'middleeast', name: '中东', icon: '🏜️', flag: '🏜️' },
+  { id: 'east-asia', name: '东亚', nameEn: 'East Asia', icon: '🎌', flag: '🇯🇵' },
+  { id: 'southeast-asia', name: '东南亚', nameEn: 'Southeast Asia', icon: '🌏', flag: '🌏' },
+  { id: 'oceania', name: '大洋洲', nameEn: 'Oceania', icon: '🦘', flag: '🇦🇺' },
+  { id: 'europe', name: '欧洲', nameEn: 'Europe', icon: '🇪🇺', flag: '🇪🇺' },
+  { id: 'north-america', name: '北美', nameEn: 'North America', icon: '🌎', flag: '🇺🇸' },
+  { id: 'middleeast', name: '中东', nameEn: 'Middle East', icon: '🏜️', flag: '🏜️' },
 ];
 
 // 按区域显示的目标市场（region -> countries）
-export const MARKETS_BY_REGION: Record<string, Array<{ id: string; name: string; flag: string; tag?: string }>> = {
+export const MARKETS_BY_REGION: Record<string, Array<{ id: string; name: string; nameEn: string; flag: string; tag?: string; tagEn?: string }>> = {
   'east-asia': [
-    { id: 'japan', name: '日本', flag: '🇯🇵', tag: '热门' },
-    { id: 'korea', name: '韩国', flag: '🇰🇷' },
+    { id: 'japan', name: '日本', nameEn: 'Japan', flag: '🇯🇵', tag: '热门', tagEn: 'Popular' },
+    { id: 'korea', name: '韩国', nameEn: 'South Korea', flag: '🇰🇷' },
   ],
   'southeast-asia': [
-    { id: 'thailand', name: '泰国', flag: '🇹🇭' },
-    { id: 'vietnam', name: '越南', flag: '🇻🇳' },
-    { id: 'indonesia', name: '印度尼西亚', flag: '🇮🇩' },
-    { id: 'malaysia', name: '马来西亚', flag: '🇲🇾' },
-    { id: 'singapore', name: '新加坡', flag: '🇸🇬' },
-    { id: 'philippines', name: '菲律宾', flag: '🇵🇭' },
+    { id: 'thailand', name: '泰国', nameEn: 'Thailand', flag: '🇹🇭' },
+    { id: 'vietnam', name: '越南', nameEn: 'Vietnam', flag: '🇻🇳' },
+    { id: 'indonesia', name: '印度尼西亚', nameEn: 'Indonesia', flag: '🇮🇩' },
+    { id: 'malaysia', name: '马来西亚', nameEn: 'Malaysia', flag: '🇲🇾' },
+    { id: 'singapore', name: '新加坡', nameEn: 'Singapore', flag: '🇸🇬' },
+    { id: 'philippines', name: '菲律宾', nameEn: 'Philippines', flag: '🇵🇭' },
   ],
   'oceania': [
-    { id: 'australia', name: '澳大利亚', flag: '🇦🇺', tag: '热门' },
-    { id: 'newzealand', name: '新西兰', flag: '🇳🇿' },
+    { id: 'australia', name: '澳大利亚', nameEn: 'Australia', flag: '🇦🇺', tag: '热门', tagEn: 'Popular' },
+    { id: 'newzealand', name: '新西兰', nameEn: 'New Zealand', flag: '🇳🇿' },
   ],
   'europe': [
-    { id: 'germany', name: '德国', flag: '🇩🇪' },
-    { id: 'france', name: '法国', flag: '🇫🇷' },
-    { id: 'uk', name: '英国', flag: '🇬🇧' },
-    { id: 'italy', name: '意大利', flag: '🇮🇹' },
-    { id: 'spain', name: '西班牙', flag: '🇪🇸' },
-    { id: 'netherlands', name: '荷兰', flag: '🇳🇱' },
+    { id: 'germany', name: '德国', nameEn: 'Germany', flag: '🇩🇪' },
+    { id: 'france', name: '法国', nameEn: 'France', flag: '🇫🇷' },
+    { id: 'uk', name: '英国', nameEn: 'United Kingdom', flag: '🇬🇧' },
+    { id: 'italy', name: '意大利', nameEn: 'Italy', flag: '🇮🇹' },
+    { id: 'spain', name: '西班牙', nameEn: 'Spain', flag: '🇪🇸' },
+    { id: 'netherlands', name: '荷兰', nameEn: 'Netherlands', flag: '🇳🇱' },
   ],
   'north-america': [
-    { id: 'usa', name: '美国', flag: '🇺🇸', tag: '热门' },
-    { id: 'canada', name: '加拿大', flag: '🇨🇦' },
+    { id: 'usa', name: '美国', nameEn: 'United States', flag: '🇺🇸', tag: '热门', tagEn: 'Popular' },
+    { id: 'canada', name: '加拿大', nameEn: 'Canada', flag: '🇨🇦' },
   ],
   'middleeast': [
-    { id: 'uae', name: '阿联酋', flag: '🇦🇪' },
-    { id: 'saudi', name: '沙特阿拉伯', flag: '🇸🇦' },
-    { id: 'qatar', name: '卡塔尔', flag: '🇶🇦' },
+    { id: 'uae', name: '阿联酋', nameEn: 'UAE', flag: '🇦🇪' },
+    { id: 'saudi', name: '沙特阿拉伯', nameEn: 'Saudi Arabia', flag: '🇸🇦' },
+    { id: 'qatar', name: '卡塔尔', nameEn: 'Qatar', flag: '🇶🇦' },
   ],
 };
 
