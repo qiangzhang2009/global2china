@@ -7,43 +7,6 @@ const Footer = () => {
 
   return (
     <footer className="bg-gray-900 text-gray-300">
-      {/* ZXQConsulting Cross-Promotion Banner */}
-      <div className="bg-gradient-to-r from-blue-700 to-indigo-800 py-10">
-        <div className="container mx-auto px-6 text-center">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center">
-              <Globe className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-blue-100 text-sm font-medium">
-              上海张小强企业咨询 · 全球扩张战略合作伙伴
-            </span>
-          </div>
-          <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
-            需要专业团队帮您制定全球扩张战略？
-          </h3>
-          <p className="text-blue-100 text-sm max-w-xl mx-auto mb-6">
-            从市场进入策略到运营实施，ZXQConsulting 提供端到端咨询与实施服务。AI技术驱动，助力企业快速打开全球市场。
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <a
-              href="https://www.zxqconsulting.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-xl transition-all hover:scale-105"
-            >
-              访问 ZXQConsulting 官网
-              <ArrowRight className="w-4 h-4" />
-            </a>
-            <a
-              href="https://global2china.zxqconsulting.com/#about"
-              className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 transition-colors"
-            >
-              了解更多服务
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* AfricaZero Cross-Promotion Banner */}
       <div className="bg-gradient-to-r from-orange-600 to-amber-600 py-12">
         <div className="container mx-auto px-6 text-center">
