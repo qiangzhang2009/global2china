@@ -159,58 +159,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* AfricaZero */}
-          <div>
-            <h4 className="text-white font-bold mb-6 text-lg flex items-center gap-2">
-              <div className="w-5 h-5 bg-orange-500 rounded flex items-center justify-center shrink-0">
-                <span className="text-white font-bold text-[9px]">A0</span>
-              </div>
-              AfricaZero
-            </h4>
-            <ul className="space-y-3">
-              <li>
-                <a
-                  href="https://africa.zxqconsulting.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-gray-400 hover:text-orange-400 transition-colors text-sm"
-                >
-                  <span>{t('footer.africa.linkName')}</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://africa.zxqconsulting.com/calculator"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-orange-400 transition-colors text-sm block"
-                >
-                  {t('footer.africa.sublink1')}
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://africa.zxqconsulting.com/hs-lookup"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-orange-400 transition-colors text-sm block"
-                >
-                  {t('footer.africa.sublink2')}
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://africa.zxqconsulting.com/origin-check"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-orange-400 transition-colors text-sm block"
-                >
-                  {t('footer.africa.sublink3')}
-                </a>
-              </li>
-            </ul>
-          </div>
-
           {/* ZXQConsulting */}
           <div>
             <h4 className="text-white font-bold mb-6 text-lg flex items-center gap-2">

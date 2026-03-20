@@ -67,6 +67,15 @@ const resources = {
       'footer.copyright': '上海张小强企业咨询事务所. 版权所有',
       'footer.privacy': '隐私政策',
       'footer.terms': '服务条款',
+      'footer.africa.tagline': 'AfricaZero · 非洲零关税全链路决策平台',
+      'footer.africa.title': '非洲零关税 · 中国进口省钱神器',
+      'footer.africa.desc': '2026年5月1日起，中国对53个非洲国家100%税目零关税。输入商品和原产地，秒知节省金额与到岸成本。',
+      'footer.africa.cta': '前往 AfricaZero',
+      'footer.africa.columnTitle': '非洲零关税',
+      'footer.africa.linkName': 'AfricaZero · 非洲零关税',
+      'footer.africa.sublink1': '关税计算器',
+      'footer.africa.sublink2': 'HS编码查询',
+      'footer.africa.sublink3': '原产地自测',
 
       // 服务
       'services.title': '我们的服务',
@@ -465,6 +474,15 @@ const resources = {
       'footer.copyright': 'Zhang Qiang Consulting. All Rights Reserved.',
       'footer.privacy': 'Privacy Policy',
       'footer.terms': 'Terms of Service',
+      'footer.africa.tagline': 'AfricaZero · Africa Tariff-Free Decision Platform',
+      'footer.africa.title': 'Africa Zero-Tariff · China Import Savings Tool',
+      'footer.africa.desc': 'From May 1, 2026, China offers 100% duty-free access on all tariff lines for 53 African countries. Calculate your savings instantly.',
+      'footer.africa.cta': 'Go to AfricaZero',
+      'footer.africa.columnTitle': 'Africa Zero-Tariff',
+      'footer.africa.linkName': 'AfricaZero · Africa Zero-Tariff',
+      'footer.africa.sublink1': 'Tariff Calculator',
+      'footer.africa.sublink2': 'HS Code Lookup',
+      'footer.africa.sublink3': 'Origin Self-Check',
 
       'services.title': 'Our Services',
       'services.subtitle': 'Comprehensive import solutions covering the entire process',
@@ -814,6 +832,15 @@ const resources = {
       'footer.copyright': '張強コンサルティング. All Rights Reserved.',
       'footer.privacy': 'プライバシーポリシー',
       'footer.terms': '利用規約',
+      'footer.africa.tagline': 'AfricaZero · アフリカ関税ゼロ意思決定プラットフォーム',
+      'footer.africa.title': 'アフリカ関税ゼロ · 中国輸入節約ツール',
+      'footer.africa.desc': '2026年5月1日から、中国は53のアフリカ再建交国に対して全税率項目を関税免除。商品と産地を入力すれば、節約額とコストが瞬時にわかります。',
+      'footer.africa.cta': 'AfricaZeroへ',
+      'footer.africa.columnTitle': 'アフリカ関税ゼロ',
+      'footer.africa.linkName': 'AfricaZero · アフリカ関税ゼロ',
+      'footer.africa.sublink1': '関税計算機',
+      'footer.africa.sublink2': 'HSコード検索',
+      'footer.africa.sublink3': '原産地自己診断',
 
       'services.title': 'サービス内容',
       'services.subtitle': 'プロセス全体をカバーする総合的な輸入ソリューション',
@@ -1131,6 +1158,15 @@ const resources = {
       'footer.copyright': '장챵 컨설팅. All Rights Reserved.',
       'footer.privacy': '개인정보 처리방침',
       'footer.terms': '이용약관',
+      'footer.africa.tagline': 'AfricaZero · 아프리카 무관세 의사결정 플랫폼',
+      'footer.africa.title': '아프리카 무관세 · 중국 수입 절감 도구',
+      'footer.africa.desc': '2026년 5월 1일부터 중국은 53개 아프리카 수교국에 全세목목 100% 무관세 적용. 상품과 원산지를 입력하면 절감액과 비용을 즉시 확인.',
+      'footer.africa.cta': 'AfricaZero 이동',
+      'footer.africa.columnTitle': '아프리카 무관세',
+      'footer.africa.linkName': 'AfricaZero · 아프리카 무관세',
+      'footer.africa.sublink1': '관세 계산기',
+      'footer.africa.sublink2': 'HS 코드 조회',
+      'footer.africa.sublink3': '원산지 자가 진단',
 
       'services.title': '서비스',
       'services.subtitle': '전 프로세스를 포괄하는 종합적인 수입 솔루션',
@@ -1454,6 +1490,17 @@ const resources = {
       'footer.tools': 'KI-Tools',
       'footer.contact': 'Kontakt',
       'footer.copyright': '© 2024 Global2China. Alle Rechte vorbehalten',
+      'footer.africa.tagline': 'AfricaZero · Afrika Zollfrei Plattform',
+      'footer.africa.title': 'Afrika Zollfrei · China-Import Spar-Tool',
+      'footer.africa.desc': 'Ab 1. Mai 2026 gewährt China 100% Zollbefreiung für alle Zolltariflinien für 53 afrikanische Länder. Berechnen Sie Ihre Ersparnis sofort.',
+      'footer.africa.cta': 'Zu AfricaZero',
+      'footer.africa.columnTitle': 'Afrika Zollfrei',
+      'footer.africa.linkName': 'AfricaZero · Afrika Zollfrei',
+      'footer.africa.sublink1': 'Zollrechner',
+      'footer.africa.sublink2': 'HS-Code Suche',
+      'footer.africa.sublink3': 'Ursprungsland-Check',
+      'footer.privacy': 'Datenschutzrichtlinie',
+      'footer.terms': 'Nutzungsbedingungen',
       'tool.productType': 'Produkttyp',
       'tool.originCountry': 'Herkunftsland',
       'tool.targetMarket': 'Zielmarkt',
@@ -1673,6 +1720,17 @@ const resources = {
       'footer.tools': 'Outils IA',
       'footer.contact': 'Contact',
       'footer.copyright': '© 2024 Global2China. Tous droits réservés',
+      'footer.africa.tagline': 'AfricaZero · Plateforme Africaine Zéro Douane',
+      'footer.africa.title': 'Afrique Zéro Droit · Outil d\'Économie à l\'Importation Chine',
+      'footer.africa.desc': 'À partir du 1er mai 2026, la Chine offre l\'exonération totale des droits de douane sur toutes les lignes tarifaires pour 53 pays africains.',
+      'footer.africa.cta': 'Aller sur AfricaZero',
+      'footer.africa.columnTitle': 'Afrique Zéro Droit',
+      'footer.africa.linkName': 'AfricaZero · Afrique Zéro Droit',
+      'footer.africa.sublink1': 'Calculateur de Droits',
+      'footer.africa.sublink2': 'Recherche Code HS',
+      'footer.africa.sublink3': 'Auto-Diagnostic Origine',
+      'footer.privacy': 'Politique de Confidentialité',
+      'footer.terms': "Conditions d'Utilisation",
       'tool.productType': 'Type de Produit',
       'tool.originCountry': 'Pays d\'Origine',
       'tool.targetMarket': 'Marché Cible',
@@ -1902,6 +1960,17 @@ const resources = {
       'footer.tools': 'Herramientas IA',
       'footer.contact': 'Contacto',
       'footer.copyright': '© 2024 Global2China. Todos los derechos reservados',
+      'footer.africa.tagline': 'AfricaZero · Plataforma Africana de Cero Arancel',
+      'footer.africa.title': 'África Cero Arancel · Herramienta de Ahorro en Importación a China',
+      'footer.africa.desc': 'Desde el 1 de mayo de 2026, China ofrece exención del 100% de aranceles en todas las líneas arancelarias para 53 países africanos.',
+      'footer.africa.cta': 'Ir a AfricaZero',
+      'footer.africa.columnTitle': 'África Cero Arancel',
+      'footer.africa.linkName': 'AfricaZero · África Cero Arancel',
+      'footer.africa.sublink1': 'Calculadora de Aranceles',
+      'footer.africa.sublink2': 'Búsqueda Código HS',
+      'footer.africa.sublink3': 'Autodiagnóstico de Origen',
+      'footer.privacy': 'Política de Privacidad',
+      'footer.terms': 'Términos de Servicio',
       'tool.productType': 'Tipo de Producto',
       'tool.originCountry': 'País de Origen',
       'tool.targetMarket': 'Mercado Objetivo',
@@ -2149,6 +2218,17 @@ const resources = {
       'footer.tools': 'Strumenti IA',
       'footer.contact': 'Contatti',
       'footer.copyright': '© 2024 Global2China. Tutti i diritti riservati',
+      'footer.africa.tagline': 'AfricaZero · Piattaforma Africana Zero Dazio',
+      'footer.africa.title': 'Africa Zero Dazio · Strumento di Risparmio Importazione Cina',
+      'footer.africa.desc': 'Dal 1° maggio 2026, la Cina offre l\'esenzione totale dai dazi su tutte le voci tariffarie per 53 paesi africani.',
+      'footer.africa.cta': 'Vai su AfricaZero',
+      'footer.africa.columnTitle': 'Africa Zero Dazio',
+      'footer.africa.linkName': 'AfricaZero · Africa Zero Dazio',
+      'footer.africa.sublink1': 'Calcolatore Dazi',
+      'footer.africa.sublink2': 'Ricerca Codice HS',
+      'footer.africa.sublink3': 'Autodiagnosi Origine',
+      'footer.privacy': 'Informativa sulla Privacy',
+      'footer.terms': 'Termini di Servizio',
       'tool.productType': 'Tipo di Prodotto',
       'tool.originCountry': 'Paese di Origine',
       'tool.targetMarket': 'Mercato Target',
@@ -2400,6 +2480,17 @@ const resources = {
       'footer.tools': 'Ferramentas IA',
       'footer.contact': 'Contato',
       'footer.copyright': '© 2024 Global2China. Todos os direitos reservados',
+      'footer.africa.tagline': 'AfricaZero · Plataforma Africana Livre de Impostos',
+      'footer.africa.title': 'África Livre de Impostos · Ferramenta de Economia na Importação para China',
+      'footer.africa.desc': 'A partir de 1 de maio de 2026, a China oferece isenção de 100% dos direitos aduaneiros em todas as linhas tarifárias para 53 países africanos.',
+      'footer.africa.cta': 'Ir para AfricaZero',
+      'footer.africa.columnTitle': 'África Livre de Impostos',
+      'footer.africa.linkName': 'AfricaZero · África Livre de Impostos',
+      'footer.africa.sublink1': 'Calculadora de Impostos',
+      'footer.africa.sublink2': 'Pesquisa Código HS',
+      'footer.africa.sublink3': 'Autodiagnóstico de Origem',
+      'footer.privacy': 'Política de Privacidade',
+      'footer.terms': 'Termos de Serviço',
       'tool.productType': 'Tipo de Produto',
       'tool.originCountry': 'País de Origem',
       'tool.targetMarket': 'Mercado Alvo',
@@ -2651,6 +2742,17 @@ const resources = {
       'footer.tools': 'ИИ Инструменты',
       'footer.contact': 'Контакты',
       'footer.copyright': '© 2024 Global2China. Все права защищены',
+      'footer.africa.tagline': 'AfricaZero · Платформа Африки Без Пошлин',
+      'footer.africa.title': 'Африка Без Пошлин · Инструмент Экономии при Импорте в Китай',
+      'footer.africa.desc': 'С 1 мая 2026 года Китай предоставляет 100% освобождение от таможенных пошлин по всем тарифным линиям для 53 африканских стран.',
+      'footer.africa.cta': 'Перейти на AfricaZero',
+      'footer.africa.columnTitle': 'Африка Без Пошлин',
+      'footer.africa.linkName': 'AfricaZero · Африка Без Пошлин',
+      'footer.africa.sublink1': 'Калькулятор Пошлин',
+      'footer.africa.sublink2': 'Поиск Кода ТН ВЭД',
+      'footer.africa.sublink3': 'Самодиагностика Происхождения',
+      'footer.privacy': 'Политика Конфиденциальности',
+      'footer.terms': 'Условия Использования',
       'tool.productType': 'Тип Товара',
       'tool.originCountry': 'Страна Происхождения',
       'tool.targetMarket': 'Целевой Рынок',
@@ -2902,6 +3004,17 @@ const resources = {
       'footer.tools': 'أدوات الذكاء الاصطناعي',
       'footer.contact': 'اتصل بنا',
       'footer.copyright': '© 2024 Global2China. جميع الحقوق محفوظة',
+      'footer.africa.tagline': 'AfricaZero · منصة أفريقيا بدون رسوم جمركية',
+      'footer.africa.title': 'أفريقيا بدون رسوم جمركية · أداة توفير تكاليف الاستيراد للصين',
+      'footer.africa.desc': 'ابتداءً من 1 مايو 2026، تقدم الصين إعفاءً بنسبة 100% من الرسوم الجمركية على جميع البنود الجمركية لـ 53 دولة أفريقية.',
+      'footer.africa.cta': 'انتقل إلى AfricaZero',
+      'footer.africa.columnTitle': 'أفريقيا بدون رسوم جمركية',
+      'footer.africa.linkName': 'AfricaZero · أفريقيا بدون رسوم جمركية',
+      'footer.africa.sublink1': 'حاسبة الرسوم الجمركية',
+      'footer.africa.sublink2': 'البحث عن رمز HS',
+      'footer.africa.sublink3': 'تشخيص ذاتي للمنشأ',
+      'footer.privacy': 'سياسة الخصوصية',
+      'footer.terms': 'الشروط والأحكام',
       'tool.productType': 'نوع المنتج',
       'tool.originCountry': 'بلد المنشأ',
       'tool.targetMarket': 'السوق المستهدف',
@@ -3046,46 +3159,33 @@ const resources = {
 };
 
 // i18n 初始化配置
-// 根据系统语言自动切换，默认为英文
+// 自动检测访客系统语言，优先使用中文（针对中文用户群体）
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
-    // 默认语言为英文（国际化网站的标准做法）
-    lng: 'en',
-    fallbackLng: 'en',
+    // 默认语言（如果检测不到系统语言则使用中文）
+    lng: 'zh',
+    fallbackLng: 'zh',
     interpolation: {
       escapeValue: false,
     },
     detection: {
-      // 检测顺序：本地存储 -> 系统语言 -> HTML标签 -> 浏览器语言
-      order: ['localStorage', 'navigator', 'htmlTag'],
+      // 检测顺序：系统语言 -> 本地存储 -> HTML标签
+      // 优先检测访客的系统语言，自动显示对应版本
+      order: ['navigator', 'localStorage', 'htmlTag'],
       caches: ['localStorage'],
       lookupLocalStorage: 'i18nextLng',
       // 系统语言检测配置
       lookupFromPathIndex: 0,
+      // 忽略缓存的过期时间
+      cacheDuration: 7 * 24 * 60 * 60 * 1000, // 7 days
     },
     // 不兼容的语言映射
     react: {
       useSuspense: false,
     },
   });
-
-// 初始化后，如果本地存储没有语言设置，则自动检测系统语言
-const initLanguage = () => {
-  const storedLang = localStorage.getItem('i18nextLng');
-  if (!storedLang) {
-    const browserLang = navigator.language || (navigator as any).userLanguage || 'en';
-    const langCode = browserLang.split('-')[0];
-    // 支持的语言列表
-    const supportedLangs = ['zh', 'en', 'ja', 'ko', 'de', 'fr', 'es', 'it', 'pt', 'ru', 'ar'];
-    const targetLang = supportedLangs.includes(langCode) ? langCode : 'en';
-    i18n.changeLanguage(targetLang);
-  }
-};
-
-// 立即执行初始化语言检测
-initLanguage();
 
 export default i18n;
