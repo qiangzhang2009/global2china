@@ -1,4 +1,4 @@
-import { Globe, Mail, Phone, MapPin, Sparkles } from 'lucide-react';
+import { Globe, MapPin, Sparkles, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
@@ -7,7 +7,71 @@ const Footer = () => {
 
   return (
     <footer className="bg-gray-900 text-gray-300">
-      {/* Footer Top - CTA */}
+      {/* ZXQConsulting Cross-Promotion Banner */}
+      <div className="bg-gradient-to-r from-blue-700 to-indigo-800 py-10">
+        <div className="container mx-auto px-6 text-center">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center">
+              <Globe className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-blue-100 text-sm font-medium">
+              上海张小强企业咨询 · 全球扩张战略合作伙伴
+            </span>
+          </div>
+          <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
+            需要专业团队帮您制定全球扩张战略？
+          </h3>
+          <p className="text-blue-100 text-sm max-w-xl mx-auto mb-6">
+            从市场进入策略到运营实施，ZXQConsulting 提供端到端咨询与实施服务。AI技术驱动，助力企业快速打开全球市场。
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <a
+              href="https://www.zxqconsulting.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-white text-blue-700 px-6 py-2.5 rounded-full font-semibold text-sm hover:shadow-xl transition-all hover:scale-105"
+            >
+              访问 ZXQConsulting 官网
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <a
+              href="https://global2china.zxqconsulting.com/#about"
+              className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-white/20 transition-colors"
+            >
+              了解更多服务
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* AfricaZero Cross-Promotion Banner */}
+      <div className="bg-gradient-to-r from-orange-600 to-amber-600 py-12">
+        <div className="container mx-auto px-6 text-center">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xs">A0</span>
+            </div>
+            <span className="text-orange-100 text-sm font-medium">{t('footer.africa.tagline')}</span>
+          </div>
+          <h3 className="text-2xl md:text-3xl font-bold text-white mb-4" style={{ fontFamily: 'Noto Serif SC, serif' }}>
+            {t('footer.africa.title')}
+          </h3>
+          <p className="text-orange-100 text-base max-w-xl mx-auto mb-6">
+            {t('footer.africa.desc')}
+          </p>
+          <a
+            href="https://africa.zxqconsulting.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-white text-orange-600 px-7 py-3.5 rounded-full font-bold text-base hover:shadow-xl transition-all hover:scale-105"
+          >
+            {t('footer.africa.cta')}
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
+      </div>
+
+      {/* Footer Top - Main CTA */}
       <div className="bg-gradient-to-r from-emerald-600 to-teal-700 py-16">
         <div className="container mx-auto px-6 text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
@@ -31,7 +95,7 @@ const Footer = () => {
 
       {/* Footer Main */}
       <div className="container mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10">
           {/* Brand & Description */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
@@ -92,6 +156,110 @@ const Footer = () => {
                   </a>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          {/* AfricaZero */}
+          <div>
+            <h4 className="text-white font-bold mb-6 text-lg flex items-center gap-2">
+              <div className="w-5 h-5 bg-orange-500 rounded flex items-center justify-center shrink-0">
+                <span className="text-white font-bold text-[9px]">A0</span>
+              </div>
+              AfricaZero
+            </h4>
+            <ul className="space-y-3">
+              <li>
+                <a
+                  href="https://africa.zxqconsulting.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-400 hover:text-orange-400 transition-colors text-sm"
+                >
+                  <span>{t('footer.africa.linkName')}</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://africa.zxqconsulting.com/calculator"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-orange-400 transition-colors text-sm block"
+                >
+                  {t('footer.africa.sublink1')}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://africa.zxqconsulting.com/hs-lookup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-orange-400 transition-colors text-sm block"
+                >
+                  {t('footer.africa.sublink2')}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://africa.zxqconsulting.com/origin-check"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-orange-400 transition-colors text-sm block"
+                >
+                  {t('footer.africa.sublink3')}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* ZXQConsulting */}
+          <div>
+            <h4 className="text-white font-bold mb-6 text-lg flex items-center gap-2">
+              <div className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center shrink-0">
+                <Globe className="w-3 h-3 text-white" />
+              </div>
+              ZXQConsulting
+            </h4>
+            <ul className="space-y-3">
+              <li>
+                <a
+                  href="https://www.zxqconsulting.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
+                >
+                  官网首页
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.zxqconsulting.com/#services"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
+                >
+                  服务项目
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.zxqconsulting.com/#about"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
+                >
+                  关于我们
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.zxqconsulting.com/#contact"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
+                >
+                  联系我们
+                </a>
+              </li>
             </ul>
           </div>
 
