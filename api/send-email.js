@@ -1,11 +1,22 @@
 // Email API 路由
 // 使用 nodemailer 直接发送邮件
 
+const EMAIL_ALLOWED_ORIGINS = [
+  'https://global2china.zxqconsulting.com',
+  'https://www.zxqconsulting.com',
+  'http://localhost:3000',
+  'http://localhost:5173',
+]
+
 export default async function handler(req, res) {
-  // 设置 CORS 头
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  const origin = req.headers.origin || ''
+  const allowedOrigin = EMAIL_ALLOWED_ORIGINS.includes(origin)
+    ? origin
+    : EMAIL_ALLOWED_ORIGINS[0]
+
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST')
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'

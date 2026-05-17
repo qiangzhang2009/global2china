@@ -1,8 +1,5 @@
-// AI 分析 API 配置
-// 使用方式: import { analyzeWithAI } from '@/lib/aiAnalysis';
-
-const DEEPSEEK_API_KEY = 'sk-0b2fc8add98b482b893a6812a440abe5';
-const DEEPSEEK_BASE_URL = 'https://api.deepseek.com';
+// AI 分析配置
+// API 调用统一通过后端 /api/ai-analysis，不在前端暴露 Key
 
 // 支持的语言代码映射
 export const SUPPORTED_LANGUAGES = ['zh', 'en', 'ja', 'ko', 'de', 'fr', 'es', 'it', 'pt', 'ru', 'ar'] as const;
@@ -294,8 +291,7 @@ export interface AnalysisResult {
   };
 }
 
-// 调用 DeepSeek API 进行智能分析
-// mode: 'sell-to-china' - 进口可行性分析 | 'sourcing' - 采购选品指南
+// 通过后端 API 调用 DeepSeek AI 分析（不再在前端直接调 API，避免暴露 Key）
 export async function analyzeWithAI(
   productType: string,
   targetRegion: string,
@@ -308,229 +304,55 @@ export async function analyzeWithAI(
     categoryContext?: string;
     countryName?: string;
     countryRegion?: string;
-    userRole?: string;           // 用户身份（USER_ROLES 的 name），选填
-    businessStage?: string;       // 当前业务阶段（BUSINESS_STAGES 的 name），选填
-    painPoints?: string[];        // 核心痛点（CORE_PAIN_POINTS 的 name），选填
-    language?: string;            // 当前语言代码，用于返回对应语言的分析结果
+    userRole?: string;
+    businessStage?: string;
+    painPoints?: string[];
+    language?: string;
   }
 ): Promise<AnalysisResult> {
-  const productName = options?.productName || productType;
-  const categoryLevel1Name = options?.categoryLevel1Name || '';
-  const categoryLevel2Name = options?.categoryLevel2Name || productName;
-  const categoryContext = options?.categoryContext || '';
-  const countryName = options?.countryName || '';
-  const countryRegion = options?.countryRegion || '';
-  const userRole = options?.userRole || '';
-  const businessStage = options?.businessStage || '';
-  const painPoints = options?.painPoints || [];
-  const language = options?.language || 'zh';
+  const response = await fetch('/api/ai-analysis', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ productType, targetRegion, mode, originRegion, options }),
+  });
 
-  const hasUserContext = Boolean(userRole || businessStage);
-  const userContextBlock = hasUserContext
-    ? `
-【用户身份与阶段】（请据此调整分析深度与下一步建议的针对性）
-- 用户身份：${userRole || '未选择'}
-- 当前业务阶段：${businessStage || '未选择'}
-`
-    : '';
+  const data = await response.json();
 
-  // 核心痛点/关注点
-  const painPointsBlock = painPoints.length > 0
-    ? `
-【核心关注点】（AI将重点分析以下内容）
-- 用户关心的核心问题：${painPoints.join('、')}
-`
-    : '';
+  if (!response.ok || !data.success) {
+    throw new Error(data.error || 'AI analysis failed');
+  }
 
-  const productAndAudienceBlock = categoryContext
-    ? `【重要：请严格按以下品类与目标人群分析，勿与其他品类混淆】
-- 品类与目标人群说明：${categoryContext}
-- 一级分类：${categoryLevel1Name}
-- 二级分类：${categoryLevel2Name}
-- 分析对象简称：${productName}`
-    : `- 产品类型/二级分类：${productName}
-${categoryLevel1Name ? `- 一级分类：${categoryLevel1Name}` : ''}`;
+  let content = data.result.content;
 
-  let prompt = '';
+  if (typeof content === 'string') {
+    const cleaned = content
+      .replace(/```json\n?/g, '').replace(/```\n?/g, '')
+      .replace(/【】/g, '').replace(/「」/g, '')
+      .replace(/\n/g, ' ')
+      .replace(/,\s*}/g, '}').replace(/,\s*]/g, ']')
+      .trim();
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      return {
+        ...parsed,
+        content,
+        productType: data.result.productType,
+        targetRegion: data.result.targetRegion,
+        mode: data.result.mode,
+        contactUs: getContactUsContent(options?.language || 'zh'),
+      };
+    }
+    return {
+      marketDemand: { overall: content.substring(0, 200), regional: '', targetCustomers: '', growthTrend: '' },
+      contactUs: getContactUsContent(options?.language || 'zh'),
+    } as AnalysisResult;
+  }
 
-  // 根据语言参数生成回复语言指令
-  const languageInstructions: Record<string, string> = {
-    zh: '【重要】你必须全程使用简体中文回答，包括所有专业术语、概念名称、证书名称、法规名称等。禁止使用任何英文词汇或英文缩写。',
-    en: '【Important】You must answer entirely in English, including all professional terms, concept names, certificate names, and regulatory names. Use English translations for all terms.',
-    ja: '【重要】あなたは日本語で完全に回答する必要がありますの専門用語、概念名、証明書名、法規名なども含めてすべて日本語で回答してください。',
-    ko: '【중요】모든 전문 용어, 개념 이름, 증서 이름, 법규 이름을 포함하여 완전히 한국어로 답변해야 합니다.',
-    de: '【Wichtig】Sie müssen vollständig auf Deutsch antworten, einschließlich aller Fachbegriffe, Konzeptnamen, Zertifikatsnamen und法规namen.',
-    fr: '【Important】Vous devez répondre entièrement en français, y compris tous les termes professionnels, noms de concepts, noms de certificats et noms de réglementations.',
-    es: '【Importante】Debe responder completamente en español, incluidos todos los términos profesionales, nombres de conceptos, nombres de certificados y nombres de regulaciones.',
-    it: '【Importante】Devi rispondere interamente in italiano, inclusi tutti i termini professionali, nomi di concetti, nomi di certificati e nomi di regolamenti.',
-    pt: '【Importante】Você deve responder inteiramente em português, incluindo todos os termos profissionais, nomes de conceitos, nomes de certificados e nomes de regulamentações.',
-    ru: '【Важно】Вы должны отвечать полностью на русском языке, включая все профессиональные термины, названия концепций, названия сертификатов и названия нормативных актов.',
-    ar: '【重要】يجب أن تجيب بالكامل باللغة العربية، بما في ذلك جميع المصطلحات المهنية وأسماء المفاهيم وأسماء الشهادات وأسماء اللوائح.',
+  return {
+    ...(content as AnalysisResult),
+    contactUs: getContactUsContent(options?.language || 'zh'),
   };
-
-  const langInstruction = languageInstructions[language] || languageInstructions.zh;
-
-  if (mode === 'sell-to-china') {
-    // 卖到中国模式：分析进口可行性 - 针对特定区域
-    prompt = `你是一位专业的国际贸易咨询顾问，专注于帮助海外产品进入中国市场。请基于以下详细信息提供一个全面的AI分析。
-
-${productAndAudienceBlock}
-${userContextBlock}
-${painPointsBlock}
-【用户选择的其他关键信息】
-- 目标销售区域: ${targetRegion}
-${countryRegion ? `- 产品来源地区: ${countryRegion}` : ''}
-
-${langInstruction}
-
-【请提供以下分析（用JSON格式返回）】
-{
-  "marketDemand": {
-    "overall": "该类产品在中国整体市场需求分析（1-2句话）",
-    "regional": "针对${targetRegion}区域的定制市场需求分析，包括该区域消费特点",
-    "targetCustomers": "目标客户群体描述，如年龄、收入、消费习惯",
-    "growthTrend": "市场增长趋势预测"
-  },
-  "competition": {
-    "level": "竞争程度（低/中/高）",
-    "mainCompetitors": ["主要竞争对手1", "主要竞争对手2", "主要竞争对手3"],
-    "differentiation": "差异化建议：如何在这个区域市场中脱颖而出"
-  },
-  "pricing": {
-    "recommendedRange": "建议售价范围（人民币）",
-    "costBreakdown": "成本构成说明（进货成本、物流、关税、渠道费用等）",
-    "margin": "利润空间预估"
-  },
-  "timeline": {
-    "import": "进口清关预估周期",
-    "marketEntry": "市场进入完成预估周期",
-    "roi": "投资回报预估周期"
-  },
-  "challenges": {
-    "level": "整体风险等级（低/中/高）",
-    "mainRisks": ["主要风险点1", "主要风险点2", "主要风险点3"],
-    "mitigation": ["风险应对建议1", "风险应对建议2", "风险应对建议3"]
-  },
-  "compliance": {
-    "certifications": ["必需资质证书1", "必需资质证书2", "必需资质证书3"],
-    "labeling": ["标签要求1", "标签要求2"],
-    "testing": ["检测要求1", "检测要求2"]
-  },
-  "actionPlan": {
-    "nextSteps": ["下一步行动1", "下一步行动2", "下一步行动3"],
-    "priority": "优先级建议（立即行动/观望/需要更多调研）",
-    "keySuccessFactors": ["成功关键因素1", "成功关键因素2", "成功关键因素3"]
-  }
-}
-
-请用${language === 'zh' ? '中文' : language === 'en' ? 'English' : language === 'ja' ? '日本語' : language === 'ko' ? '한국어' : '中文'}回复，只返回JSON，不要其他内容。禁止在回复中出现任何英文单词或英文缩写（如"ROI"、"GMP"、"COA"、"EMC"等必须用对应语言表达）。`;
-  } else {
-    // 采购模式：分析采购选品建议 - 针对特定国家和区域
-    prompt = `你是一位专业的海外采购咨询顾问，专注于帮助中国采购商从海外采购优质产品。请基于以下详细信息提供一个全面的AI分析。
-
-${productAndAudienceBlock}
-${userContextBlock}
-${painPointsBlock}
-【用户选择的其他关键信息】
-- 采购来源地区: ${originRegion || targetRegion}
-${countryName ? `- 采购目标国家: ${countryName}` : ''}
-
-${langInstruction}
-
-【请提供以下分析（用JSON格式返回）】
-{
-  "marketDemand": {
-    "overall": "${countryName || originRegion || targetRegion}地区该品类整体采购热度分析",
-    "regional": "针对该地区市场的特色产品和采购优势分析",
-    "targetCustomers": "适用场景和目标客户群体",
-    "growthTrend": "采购趋势预测"
-  },
-  "competition": {
-    "level": "采购竞争程度（低/中/高）",
-    "mainCompetitors": ["主要竞争采购商类型1", "主要竞争采购商类型2"],
-    "differentiation": "差异化建议：如何获得更好的采购价格和条件"
-  },
-  "pricing": {
-    "recommendedRange": "参考采购价格区间（人民币或美元）",
-    "costBreakdown": "成本构成（产品成本、国际物流、关税、仓储等）",
-    "margin": "预计利润空间"
-  },
-  "timeline": {
-    "import": "采购到货预估周期",
-    "marketEntry": "完成首批采购预估时间",
-    "roi": "资金回笼预估周期"
-  },
-  "challenges": {
-    "level": "整体采购风险等级（低/中/高）",
-    "mainRisks": ["主要采购挑战1", "主要采购挑战2", "主要采购挑战3"],
-    "mitigation": ["应对建议1", "应对建议2", "应对建议3"]
-  },
-  "compliance": {
-    "certifications": ["进口合规资质1", "进口合规资质2", "进口合规资质3"],
-    "labeling": ["中文标签要求1", "中文标签要求2"],
-    "testing": ["检测要求1", "检测要求2"]
-  },
-  "actionPlan": {
-    "nextSteps": ["下一步行动1", "下一步行动2", "下一步行动3"],
-    "priority": "优先级建议",
-    "keySuccessFactors": ["成功关键因素1", "成功关键因素2", "成功关键因素3"]
-  }
-}
-
-请用${language === 'zh' ? '中文' : language === 'en' ? 'English' : language === 'ja' ? '日本語' : language === 'ko' ? '한국어' : '中文'}回复，只返回JSON，不要其他内容。禁止在回复中出现任何英文单词或英文缩写（如"ROI"、"GMP"、"COA"、"EMC"等必须用对应语言表达）。`;
-  }
-
-  try {
-    const response = await fetch(`${DEEPSEEK_BASE_URL}/v1/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'deepseek-chat',
-        messages: [
-          {
-            role: 'system',
-            content: '你是一位专业的国际贸易咨询顾问，擅长分析海外产品进入中国市场的可行性，以及海外采购选品策略。你的分析必须严格基于用户选择的具体选项：包括一级分类、二级分类、以及「品类与目标人群说明」。若说明中明确目标人群为老年人/银发族，则整篇分析须针对老年市场、适老产品，不得与母婴、儿童等其它品类混淆。若用户提供了「用户身份」或「当前业务阶段」，请据此调整：身份决定建议的深度与角度（如品牌方侧重合规与品牌落地，贸易商侧重供应链与利润），阶段决定侧重点（调研期侧重可行性与风险，准备首次进口侧重流程与时间表，已有经验侧重拓展与优化）。\n\n【重要】你必须全程使用简体中文回答，包括所有专业术语、概念名称、证书名称、法规名称等。禁止使用任何英文词汇或英文缩写（如"ROI"、"GMP"、"COA"等必须用中文表达，如"投资回报率"、"国际药品生产质量管理规范"、"产品成分分析证书"等）。即使是常见的中英混合表达（如"保健品蓝帽子"）也应改为纯中文（"保健食品蓝帽子标识"）。你的回复必须是100%的纯中文内容，JSON中的所有字符串值也必须是纯中文。'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 1500,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`API请求失败: ${response.status}`);
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || '';
-
-    // 解析JSON响应
-    try {
-      // 尝试提取JSON部分
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const result = JSON.parse(jsonMatch[0]);
-        // 添加联系我们信息
-        result.contactUs = getContactUsContent(language);
-        return result;
-      }
-      throw new Error('No JSON found');
-    } catch {
-      // 如果JSON解析失败，返回默认数据
-      return getDefaultAnalysis(productType, targetRegion, mode, options);
-    }
-  } catch (error) {
-    console.error('DeepSeek API 错误:', error);
-    // 返回基于规则的默认分析
-    return getDefaultAnalysis(productType, targetRegion, mode, options);
-  }
 }
 
 // 获取基于规则的默认分析（支持双模式）- 重新设计以匹配新接口

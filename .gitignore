@@ -34,3 +34,6 @@ coverage/
 # Vite
 .vite/
 .vercel
+
+# Build artifacts
+api-dist/
