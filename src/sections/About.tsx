@@ -1,56 +1,55 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Globe, ArrowRight, CheckCircle, Clock, Shield, Star, Users, Award, MapPin } from 'lucide-react';
+import { Shield, Clock, CheckCircle2, Star, ArrowRight } from 'lucide-react';
 
 const values = [
-  { icon: Shield, titleKey: 'about.value1', descKey: 'about.values.desc1' },
-  { icon: Clock, titleKey: 'about.value2', descKey: 'about.values.desc2' },
-  { icon: CheckCircle, titleKey: 'about.value3', descKey: 'about.values.desc3' },
-  { icon: Star, titleKey: 'about.value4', descKey: 'about.values.desc4' },
+  { icon: Shield, titleKey: 'about.value1', descKey: 'about.values.desc1', color: 'bg-brand-navy' },
+  { icon: Clock, titleKey: 'about.value2', descKey: 'about.values.desc2', color: 'bg-brand-teal' },
+  { icon: CheckCircle2, titleKey: 'about.value3', descKey: 'about.values.desc3', color: 'bg-brand-gold' },
+  { icon: Star, titleKey: 'about.value4', descKey: 'about.values.desc4', color: 'bg-rose-500' },
 ];
 
 const About = () => {
   const { t } = useTranslation();
 
   return (
-    <section id="about" className="py-28 bg-gradient-to-b from-slate-50 via-white to-slate-100 relative overflow-hidden">
-      {/* Background Decorations */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-emerald-200/40 to-teal-200/40 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-br from-blue-200/40 to-indigo-200/40 rounded-full blur-3xl" />
-      </div>
+    <section id="about" className="py-32 bg-white relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-neutral-50 to-transparent pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           {/* Left Content */}
-          <div className="animate-on-scroll">
-            <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              <CheckCircle className="w-4 h-4" />
-              <span>{t('about.subtitle')}</span>
-            </div>
+          <div>
+            <span className="badge-premium bg-neutral-100 text-neutral-600 mb-8 inline-flex">
+              {t('about.subtitle')}
+            </span>
 
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight" style={{ fontFamily: 'Noto Serif SC, serif' }}>
+            <h2 className="text-4xl md:text-5xl font-display font-semibold text-brand-navy mb-6 tracking-tight leading-tight">
               {t('about.title')}
             </h2>
 
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+            <p className="text-lg text-neutral-600 mb-4 leading-relaxed">
               {t('about.mission')}
             </p>
 
-            <p className="text-lg text-gray-500 mb-10">
+            <p className="text-base text-neutral-500 mb-12 leading-relaxed">
               {t('about.vision')}
             </p>
 
-            {/* Values */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Values Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
               {values.map((value, index) => (
-                <div key={index} className="flex items-start gap-3 bg-white/60 backdrop-blur-sm rounded-xl p-4">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                    <value.icon className="w-5 h-5 text-emerald-600" />
+                <div
+                  key={index}
+                  className="flex items-start gap-4 bg-neutral-50 rounded-2xl p-5"
+                >
+                  <div className={`w-11 h-11 rounded-xl ${value.color} flex items-center justify-center flex-shrink-0`}>
+                    <value.icon className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 text-sm">{t(value.titleKey)}</div>
-                    <div className="text-xs text-gray-500">{t(value.descKey)}</div>
+                    <div className="font-semibold text-brand-navy text-sm mb-1">{t(value.titleKey)}</div>
+                    <div className="text-xs text-neutral-500 leading-relaxed">{t(value.descKey)}</div>
                   </div>
                 </div>
               ))}
@@ -58,79 +57,45 @@ const About = () => {
 
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-8 py-4 rounded-xl font-bold mt-10 hover:shadow-xl hover:shadow-emerald-500/25 hover:-translate-y-1 transition-all"
+              className="btn-brand inline-flex items-center gap-2"
             >
-              {t('common.contactUs')} <ArrowRight className="w-5 h-5" />
+              {t('common.contactUs')}
+              <ArrowRight className="w-4 h-4" />
             </a>
           </div>
 
           {/* Right Visual */}
-          <div className="relative animate-on-scroll">
-            <div className="relative z-10">
-              {/* Right side image */}
-              <div className="rounded-3xl overflow-hidden shadow-2xl border border-gray-100 mb-6">
-                <img src="/images/about-city.png" alt="" className="w-full h-56 object-cover object-center" />
-              </div>
-              {/* Main Card */}
-              <div className="bg-white rounded-3xl p-8 shadow-2xl border border-gray-100">
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Market Cards */}
-                  <div className="space-y-4">
-                    <div className="bg-gradient-to-br from-pink-100 to-rose-200 rounded-2xl p-5 text-center">
-                      <div className="text-4xl mb-2">🗾</div>
-                      <div className="font-bold text-gray-900">{t('markets.japan')}</div>
-                      <div className="text-xs text-gray-500">{t('markets.japan.desc')}</div>
-                    </div>
-                    <div className="bg-gradient-to-br from-blue-100 to-indigo-200 rounded-2xl p-5 text-center">
-                      <div className="text-4xl mb-2">🇪🇺</div>
-                      <div className="font-bold text-gray-900">{t('markets.europe')}</div>
-                      <div className="text-xs text-gray-500">{t('markets.europe.desc')}</div>
-                    </div>
-                  </div>
-                  <div className="space-y-4 pt-8">
-                    <div className="bg-gradient-to-br from-amber-100 to-orange-200 rounded-2xl p-5 text-center">
-                      <div className="text-4xl mb-2">🌏</div>
-                      <div className="font-bold text-gray-900">{t('markets.southeast')}</div>
-                      <div className="text-xs text-gray-500">{t('markets.southeast.desc')}</div>
-                    </div>
-                    <div className="bg-gradient-to-br from-green-100 to-emerald-200 rounded-2xl p-5 text-center">
-                      <div className="text-4xl mb-2">🦘</div>
-                      <div className="font-bold text-gray-900">{t('markets.australia')}</div>
-                      <div className="text-xs text-gray-500">{t('markets.australia.desc')}</div>
-                    </div>
-                  </div>
-                </div>
+          <div className="relative">
+            {/* Main Image */}
+            <div className="rounded-3xl overflow-hidden shadow-2xl border border-neutral-200 mb-6">
+              <img
+                src="/images/about-city.png"
+                alt="中国城市天际线 - Global2China业务覆盖全国"
+                className="w-full h-64 object-cover"
+              />
+            </div>
 
-                {/* Service Tags */}
-                <div className="mt-6 pt-6 border-t border-gray-100">
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {[
-                      'about.serviceTag1',
-                      'about.serviceTag2',
-                      'about.serviceTag3',
-                      'about.serviceTag4',
-                      'about.serviceTag5'
-                    ].map((tagKey, i) => (
-                      <span key={i} className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
-                        {t(tagKey)}
-                      </span>
-                    ))}
-                  </div>
+            {/* Stats Card */}
+            <div className="bg-white rounded-2xl p-7 shadow-xl border border-neutral-200">
+              <div className="grid grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className="stat-number text-3xl text-brand-navy mb-1">50+</div>
+                  <div className="text-xs text-neutral-500 font-medium">{t('about.stat1')}</div>
                 </div>
-              </div>
-
-              {/* Floating Elements */}
-              <div className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-3xl opacity-90 shadow-xl flex items-center justify-center">
-                <Globe className="w-12 h-12 text-white" />
-              </div>
-              <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full opacity-90 shadow-xl flex items-center justify-center">
-                <Award className="w-10 h-10 text-white" />
+                <div className="text-center border-x border-neutral-100">
+                  <div className="stat-number text-3xl text-brand-navy mb-1">20+</div>
+                  <div className="text-xs text-neutral-500 font-medium">{t('about.stat2')}</div>
+                </div>
+                <div className="text-center">
+                  <div className="stat-number text-3xl text-brand-navy mb-1">98%</div>
+                  <div className="text-xs text-neutral-500 font-medium">{t('about.stat3')}</div>
+                </div>
               </div>
             </div>
 
-            {/* Decorative Blobs */}
-            <div className="absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br from-emerald-300 to-teal-400 rounded-3xl opacity-30 blur-xl" />
-            <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-gradient-to-br from-blue-300 to-indigo-400 rounded-full opacity-30 blur-xl" />
+            {/* Floating accent */}
+            <div className="absolute -top-4 -right-4 w-24 h-24 bg-brand-gold/10 rounded-3xl -z-10" />
+            <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-brand-teal/10 rounded-full -z-10" />
           </div>
         </div>
       </div>

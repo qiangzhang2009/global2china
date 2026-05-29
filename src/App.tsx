@@ -3,7 +3,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from './sections/Navbar';
 import Hero from './sections/Hero';
-import { trackPageView, trackScrollDepth, trackSectionView } from './lib/tracking';
+import Seo from './components/Seo';
+import { trackPageView, trackScrollDepth, trackSectionView } from './lib/analytics';
 
 // 懒加载下面不需要首屏渲染的组件
 const Services = lazy(() => import('./sections/Services'));
@@ -110,8 +111,10 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen relative">
-      <Navbar />
+    <>
+      <Seo />
+      <div className="min-h-screen relative">
+        <Navbar />
       <main>
         <Hero />
         <Suspense fallback={<LoadingPlaceholder />}>
@@ -127,6 +130,7 @@ function App() {
         <FloatingContact />
       </Suspense>
     </div>
+    </>
   );
 }
 

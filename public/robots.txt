@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://global2china.zxqconsulting.com/sitemap.xml
+
+# Crawl-delay for polite spiders
+Crawl-delay: 1
+
+# Block Cloudflare Workers analytics paths
+Disallow: /cdn-cgi/
+Disallow: /api/track/
