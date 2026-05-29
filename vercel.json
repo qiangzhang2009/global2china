@@ -1,12 +1,17 @@
 {
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/zh/(.*)", "destination": "/?lang=zh&$1" },
-    { "source": "/en/", "destination": "/?lang=en" },
-    { "source": "/ja/", "destination": "/?lang=ja" },
-    { "source": "/ko/", "destination": "/?lang=ko" },
-    { "source": "/de/", "destination": "/?lang=de" },
-    { "paths": ["/fr/", "/es/", "/it/", "/pt/", "/ru/", "/ar/"], "destination": "/" }
+    { "source": "/en/", "destination": "/" },
+    { "source": "/ja/", "destination": "/" },
+    { "source": "/ko/", "destination": "/" },
+    { "source": "/de/", "destination": "/" },
+    { "source": "/fr/", "destination": "/" },
+    { "source": "/es/", "destination": "/" },
+    { "source": "/it/", "destination": "/" },
+    { "source": "/pt/", "destination": "/" },
+    { "source": "/ru/", "destination": "/" },
+    { "source": "/ar/", "destination": "/" },
+    { "source": "/zh/", "destination": "/" }
   ],
   "redirects": [
     { "source": "/(zh|en|ja|ko|de|fr|es|it|pt|ru|ar)", "destination": "/", "permanent": false }
